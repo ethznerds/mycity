@@ -36,6 +36,8 @@ dependencies:
     git:
       url: git@github.com:eymarkfr/fluster.git
 
+  fluttertoast: ^7.1.6
+
   # Cache manager
   flutter_cache_manager:
     git:
