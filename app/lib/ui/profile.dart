@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:app/models/app_state.dart';
+import 'package:app/models/project.dart';
 import 'package:app/models/user.dart';
 import 'package:app/ui/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,23 +49,46 @@ class _ProfileWidget extends StatefulWidget{
   _ProfileWidgetState createState() => _ProfileWidgetState();
 }
 class _ProfileWidgetState extends State<_ProfileWidget> {
+  List<Project> dummyProjects = List.generate(20, (i) => new Project("dummy $i", "blujil kj kjh jh jhg jhfhgfjhk uo iu ou oi uo uiiuouoiu ui jkh jkh gjhghgfhgfghfhgf g fhfhgfhfhfhfgf yui yiu oyu yui yiuy io u yoiuyi y iy iy b $i", AssetImage(""), Stage.denied, []));
+  ScrollController _scrollController = new ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        //TODO Fetch things here? https://stackoverflow.com/questions/51378641/how-to-build-dynamic-list-from-http-server-in-flutter/51388537
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            // Profile avatar
-            getAvatar(),
-            SizedBox(height: 20,),
-            Text(widget.userDisplayName, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),),
-            SizedBox(height: 20,),
-            userAchievements(),
-            Spacer(),
-            logoutWidget(),
-          ],
+    return SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(30, 20, 30, 15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              // Profile avatar
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Spacer(),
+                    getAvatar(),
+                    Expanded(child: Padding(padding: EdgeInsets.only(left:20), child: logoutWidget(),)),
+                ]
+              ),
+              SizedBox(height: 20,),
+              Text(widget.userDisplayName, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),),
+              SizedBox(height: 20,),
+              userAchievements(),
+              SizedBox(height: 20,),
+              getProjects()
+            ],
+          ),
         ),
     );
   }
@@ -73,46 +97,111 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
     widget.signOut();
   }
 
+  Widget getProjects() {
+    return Container(
+      child: DefaultTabController(
+        length: 2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              child: TabBar(tabs: [
+                Tab(text: "Ongoing projects",),
+                Tab(text: "Past projects",)
+              ],
+              indicatorColor: Colors.deepPurpleAccent,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.black26,)
+            ),
+            Container(
+              height: 300,
+              child:
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: TabBarView(children: [
+                    buildProjectListView(dummyProjects),
+                    buildProjectListView(dummyProjects),
+                  ])
+                )
+            )
+          ],
+        ),
+      )
+    );
+  }
+
+  Widget buildProjectListView(List<Project> projects) {
+    return ListView.builder(
+      itemCount: projects.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(projects[index].name),
+          subtitle: Text(projects[index].description, maxLines: 2, overflow: TextOverflow.ellipsis),
+          onTap: () {/*TODO open project */},
+        );
+      },
+      controller: _scrollController,
+    );
+  }
+
   Widget userAchievements() {
     const numberStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.deepPurpleAccent);
     const textStyle = TextStyle(fontSize: 15);
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 20, 0, 25),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.black12, width: 2.0)
-      ),
       child: Column(
         children: <Widget>[
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.black12, width: 2.0)
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  child: Column(
+                    children: [
+                      Text("120", style: numberStyle,),
+                      Text("Contributions", style: textStyle)
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    children: [
+                      Text("9", style: numberStyle),
+                      Text("Issues filed", style: textStyle)
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    children: [
+                      Text("3238", style: numberStyle),
+                      Text("People reached", style: textStyle)
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                child: Column(
-                  children: [
-                    Text("120", style: numberStyle,),
-                    Text("Contributions", style: textStyle)
-                  ],
-                ),
+              Column(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/hero_icon.jpg'),
+                    minRadius: 28,
+                  ),
+                  Text("1829 Karma"),
+                ],
               ),
-              Container(
-                child: Column(
-                  children: [
-                    Text("9", style: numberStyle),
-                    Text("Issues filed", style: textStyle)
-                  ],
-                ),
-              ),
-              Container(
-                child: Column(
-                  children: [
-                    Text("3238", style: numberStyle),
-                    Text("People reached", style: textStyle)
-                  ],
-                ),
-              )
+              SizedBox(width: 20,),
+              Text("Local hero", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),)
             ],
-          )
+          ),
         ],
       ),
     );
@@ -147,16 +236,20 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
         height: 50,
         margin: EdgeInsets.fromLTRB(0, 40, 0, 0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(143, 148, 251, 1),
-                  Color.fromRGBO(143, 148, 251, .6),
-                ]
-            )
+            color: Colors.transparent
         ),
-        child: Center(
-          child: Text("Logout", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+        child: Align(
+          alignment: Alignment.topRight,
+          child: Column(
+            children: [
+              Icon(
+                Icons.logout,
+                color: Colors.red,
+                size: 30,
+              ),
+              Text("Logout"),
+            ]
+          )
         ),
       ),
     );
