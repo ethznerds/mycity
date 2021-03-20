@@ -1,9 +1,44 @@
 import 'dart:developer';
 
 import 'package:app/models/user.dart';
+import 'package:app/utils/authentication.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
+
+  const Login({
+    required this.loginState,
+    required this.email,
+    required this.startLoginFlow,
+    required this.verifyEmail,
+    required this.signInWithEmailAndPassword,
+    required this.cancelRegistration,
+    required this.registerAccount,
+    required this.signOut,
+    required this.errorMsg,
+  });
+
+  final ApplicationLoginState loginState;
+  final String? email;
+  final String? errorMsg;
+  final void Function() startLoginFlow;
+  final void Function(
+      String email,
+      void Function(Exception e) error,
+      ) verifyEmail;
+  final void Function(
+      String email,
+      String password,
+      void Function(Exception e) error,
+      ) signInWithEmailAndPassword;
+  final void Function() cancelRegistration;
+  final void Function(
+      String email,
+      String displayName,
+      String password,
+      void Function(Exception e) error,
+      ) registerAccount;
+  final void Function() signOut;
 
   @override
   _LoginState createState() => _LoginState();
@@ -12,14 +47,43 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController usernameController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  TextEditingController displayNameController = new TextEditingController();
 
-  void _doLogin() {
-    //TODO do login
-    UserModel().setUser("Hans", "Tester");
+  void _buttonClicked() {
+    if(widget.loginState == ApplicationLoginState.password) {
+      log("Password state");
+      widget.signInWithEmailAndPassword(
+          usernameController.text.trim(), passwordController.text.trim(), (e) =>
+      {
+        log("Failed to sign in with email and password")
+      });
+    } else if(widget.loginState == ApplicationLoginState.register) {
+      widget.registerAccount(
+        usernameController.text.trim(),
+        displayNameController.text.trim(),
+        passwordController.text.trim(),
+        (e)=>{
+          log("Failed to create account ${e.toString()}"),
+        }
+      );
+    }
+    else {
+      log("Email state");
+      widget.verifyEmail(usernameController.text.trim(), (e)=>{
+        log("Failed to verify email address"),
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    log(widget.errorMsg ?? "empty error msg");
+    String buttonText = "Next";
+    if(widget.loginState == ApplicationLoginState.password) {
+      buttonText = "Login";
+    } else if(widget.loginState == ApplicationLoginState.register) {
+      buttonText = "Sign up";
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -66,7 +130,7 @@ class _LoginState extends State<Login> {
                         Container(
                           padding: EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(color: Colors.grey[100]))
+                              border: Border(bottom: BorderSide(color: Colors.grey[100]!))
                           ),
                           child: TextField(
                             controller: usernameController,
@@ -77,7 +141,21 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        Container(
+                        if (widget.loginState == ApplicationLoginState.register) Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              border: Border(bottom: BorderSide(color: Colors.grey[100]!))
+                          ),
+                          child: TextField(
+                            controller: displayNameController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Enter display name",
+                                hintStyle: TextStyle(color: Colors.grey[400])
+                            ),
+                          ),
+                        ),
+                        if (widget.loginState == ApplicationLoginState.password || widget.loginState == ApplicationLoginState.register) Container(
                           padding: EdgeInsets.all(8.0),
                           child: TextField(
                             controller: passwordController,
@@ -90,13 +168,20 @@ class _LoginState extends State<Login> {
                             enableSuggestions: false,
                             autocorrect: false,
                           ),
+                        ),
+                        if (widget.errorMsg?.isNotEmpty ?? false) Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            widget.errorMsg ?? "",
+                            style: TextStyle(color: Colors.red),
+                          ),
                         )
                       ],
                     ),
                   ),
                   SizedBox(height: 30,),
                   InkWell(
-                    onTap: this._doLogin,
+                    onTap: this._buttonClicked,
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
@@ -109,15 +194,13 @@ class _LoginState extends State<Login> {
                           )
                       ),
                       child: Center(
-                        child: Text("Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                        child: Text(buttonText, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                       ),
 
                     ),
                   ),
                   SizedBox(height: 30,),
                   Text("Forgot Password?", style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),),
-                  SizedBox(height: 10,),
-                  Text("No account yet? Click here to sign up!", style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),)
                 ],
               ),
             )
