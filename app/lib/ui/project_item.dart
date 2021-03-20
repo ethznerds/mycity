@@ -1,4 +1,5 @@
 import 'package:app/models/project.dart';
+import 'package:app/ui/project_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
@@ -12,32 +13,143 @@ class ProjectItem extends StatefulWidget {
 }
 
 class _ProjectItemState extends State<ProjectItem> {
-  bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
-    return  Card(
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
+    return InkWell(
+      highlightColor: Theme.of(context).primaryColor,
+      splashColor: Theme.of(context).primaryColor,
+      onTap: () {
+
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProjectPage(project: widget.project,)));
+      },
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 11),
+          child: Row(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  widget.project.stage == Stage.initial
+                      ? Icon(Icons.lightbulb_outline)
+                      : Icon(Icons.article_outlined),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text((widget.project.upVotes + widget.project.downVotes)
+                          .toString()),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(Icons.thumbs_up_down_outlined),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 15),
+                width: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      widget.project.name,
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(widget.project.description),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        TextButton(
+                          child: Text(
+                            "buy",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 18),
+                          ),
+                          onPressed: () {},
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(11.0),
+                                      side: BorderSide(
+                                          color: Theme.of(context)
+                                              .primaryColor)))),
+                        ),
+                        Spacer(),
+                        IconButton(
+                          icon: Icon(Icons.share_outlined),
+                          onPressed: () {},
+                        ),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          icon: Icon(Icons.star_border),
+                          onPressed: () {},
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+/*        Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: widget.project.stage == Stage.initial ? Icon(Icons.lightbulb_outline) : Icon(Icons.article_outlined),
+              leading: Column(
+                children: <Widget>[
+                  //widget.project.stage == Stage.initial ? Icon(Icons.lightbulb_outline) : Icon(Icons.article_outlined),
+                  Spacer(),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text((widget.project.upVotes + widget.project.downVotes).toString()),
+                      SizedBox(width: 10,),
+
+                      Icon(Icons.thumbs_up_down_outlined),
+                    ],
+                  ),
+
+                ],
+
+            ),
               title: Text(widget.project.name),
               subtitle: Text(widget.project.description),
             ),
-            Image(image: widget.project.image),
             Row(
               //mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                IconButton(
-                    icon: Icon(_isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-                    onPressed: () {
-                      setState(() {
-                        _isExpanded = ! _isExpanded;
-                      });
-                    }
+                TextButton(
+                  child: Text("more", style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),),
+                  onPressed: () {
+
+                  },
                 ),
+
                 Spacer(),
                 IconButton(
                   icon: Icon(Icons.share_outlined),
@@ -52,11 +164,9 @@ class _ProjectItemState extends State<ProjectItem> {
               ],
             ),
           ],
+        ),*/
         ),
-        
       ),
-
-
     );
   }
 }
