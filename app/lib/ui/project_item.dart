@@ -1,4 +1,7 @@
 import 'package:app/models/project.dart';
+import 'package:app/models/user.dart';
+import 'package:app/ui/fund_project.dart';
+import 'package:app/ui/fund_project2.dart';
 import 'package:app/ui/project_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -76,7 +79,7 @@ class _ProjectItemState extends State<ProjectItem> {
                     SizedBox(
                       height: 5,
                     ),
-                    Text(widget.project.description),
+                    Text(widget.project.description, softWrap: true,maxLines: 5, overflow: TextOverflow.ellipsis,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -87,7 +90,12 @@ class _ProjectItemState extends State<ProjectItem> {
                                 color: Theme.of(context).primaryColor,
                                 fontSize: 18),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FundProject(project: widget.project, userModel: UserModel(),)));
+                          },
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(

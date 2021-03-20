@@ -20,6 +20,8 @@ class Project {
 
   int upVotes = 0;
   int downVotes = 0;
+  int funding = 0;
+
 
   Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location);
 }
