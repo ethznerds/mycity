@@ -56,7 +56,7 @@ class _AroundMeState extends State<AroundMe> {
   Future<void> _gotoCurrentLocation() async {
     LocationData _location = await loc.getLocation();
     final CameraPosition _locationPos = CameraPosition(
-        target: LatLng(_location.latitude, _location.longitude),
+        target: LatLng(_location.latitude ?? 0, _location.longitude ?? 0),
         zoom: 14);
 
     final GoogleMapController controller = await _controller.future;

@@ -36,7 +36,8 @@ Future<LocationData> getLocation() async {
   if (!_serviceEnabled) {
     _serviceEnabled = await location.requestService();
     if (!_serviceEnabled) {
-      return null;
+      //return null;
+      return location.getLocation();
     }
   }
 
@@ -44,7 +45,8 @@ Future<LocationData> getLocation() async {
   if (_permissionGranted == PermissionStatus.denied) {
     _permissionGranted = await location.requestPermission();
     if (_permissionGranted != PermissionStatus.granted) {
-      return null;
+      //return null;
+      return location.getLocation();
     }
   }
 

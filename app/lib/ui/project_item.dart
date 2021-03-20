@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ProjectItem extends StatefulWidget {
   final Project project;
 
-  const ProjectItem({Key key, this.project}) : super(key: key);
+  const ProjectItem({Key? key, required this.project}) : super(key: key);
 
   @override
   _ProjectItemState createState() => _ProjectItemState();
@@ -27,10 +27,12 @@ class _ProjectItemState extends State<ProjectItem> {
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.share_outlined),
+                onPressed: (){},
               ),
               const SizedBox(width: 8),
               IconButton(
                 icon: Icon(Icons.star_border),
+                onPressed: (){},
               ),
               const SizedBox(width: 8),
             ],

@@ -13,5 +13,8 @@ class Project {
   final Stage stage;
   final List<Proposal> proposals;
 
+  int upVotes = 0;
+  int downVotes = 0;
+
   Project(this.name, this.description, this.image, this.stage, this.proposals);
 }
