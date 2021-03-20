@@ -18,6 +18,8 @@ dependencies:
   firebase_auth: ^1.0.1
   provider: ^5.0.0
 
+  fl_chart: ^0.20.1
+
   google_maps_flutter: ^2.0.1
   location: ^4.1.1
 
