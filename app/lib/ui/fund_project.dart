@@ -5,32 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../utils/indicator.dart';
 
-/*  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[],
-        ),
-      ),
-    );
-  }*/
-
-/*class FundProject extends StatefulWidget {
-  final UserModel userModel;
-  final Project project;
-
-  const FundProject({Key? key, required this.userModel, required this.project}) : super(key: key);
-  @override
-  State<StatefulWidget> createState() => FundProjectState();
-}
-
-class FundProjectState extends State {
-  int touchedIndex = -1;*/
 
 class FundProject extends StatefulWidget {
   final UserModel userModel;
@@ -58,8 +32,8 @@ class _FundProjectState extends State<FundProject> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            Text("My Budget",
-                style: TextStyle(fontSize: 15), textAlign: TextAlign.left),
+            SizedBox(height: 6,),
+            _myBudget(Theme.of(context).primaryColor),
             _projectItem(widget.project, Theme.of(context).accentColor),
             getPage(),
           ],
@@ -94,19 +68,6 @@ class _FundProjectState extends State<FundProject> {
             style: TextStyle(fontSize: 16),
           ),
           Spacer(),
-          /*Text("15\$", style: TextStyle(fontSize: 16),),
-          SizedBox(width: 10,),
-          SizedBox(
-            width: 40,
-              height: 40,
-            child: IconButton(icon: Icon(Icons.add_circle_outline, size: 27,), onPressed: () {
-
-            }),
-          ),
-
-          IconButton(icon: Icon(Icons.remove_circle_outline), onPressed: () {
-
-          }),*/
           Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -143,6 +104,49 @@ class _FundProjectState extends State<FundProject> {
           ),
           SizedBox(
             width: 1,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _myBudget(Color color) {
+    return Card(
+      color: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+            width: 15,
+            height: 15,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Text(
+            "My Wallet",
+            style: TextStyle(fontSize: 16, color: Colors.white),
+          ),
+          Spacer(),
+          Card(
+            color: Colors.white,
+            child: Text(
+              "15 \$",
+              style: TextStyle(fontSize: 19),
+            ),
+          ),
+          SizedBox(
+            height: 45,
+            width: 27,
           ),
         ],
       ),

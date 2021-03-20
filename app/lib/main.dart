@@ -6,7 +6,7 @@ import 'package:app/ui/project_editor.dart';
 import 'package:app/ui/vote.dart';
 import 'package:app/utils/widgets.dart';
 import 'package:flutter/material.dart';
-//import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
+import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 import 'package:provider/provider.dart';
 
 import 'package:firebase_core/firebase_core.dart'; // new
@@ -76,13 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("voteUp"),
-      ),
-      // appBar: NewGradientAppBar(
+      // appBar: AppBar(
       //   title: Text("voteUp"),
-      //   gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).highlightColor]),
       // ),
+      appBar: NewGradientAppBar(
+        title: Text("voteUp"),
+        gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Theme.of(context).accentColor]),
+      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
