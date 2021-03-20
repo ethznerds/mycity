@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:app/models/project.dart';
+import 'package:app/ui/project_page.dart';
 import 'package:app/utils/map/map_helper.dart';
 import 'package:app/utils/map/map_marker.dart';
 import 'package:fluster/fluster.dart';
@@ -85,73 +86,85 @@ class _AroundMeState extends State<AroundMe> {
     );
   }
 
+  void openProjectDetails() {
+    if(selectedProject == null) {
+      return;
+    }
+    Navigator.push(context,
+      MaterialPageRoute(builder: (context)=>ProjectPage(project: selectedProject!))
+    );
+  }
+
   Widget getInfoPanel() {
     return AnimatedPositioned(
-        left: 0.0,
-        right: 0.0,
-        bottom: 40,
-        duration: Duration(milliseconds: 200),
-        child: Container(
-          width: 100,
-          height: 250,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: EdgeInsets.all(20),
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    blurRadius: 20,
-                    offset: Offset.zero,
-                    color: Colors.grey.withOpacity(0.5),
-                  )],
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.purple,
-                      child: Text("${selectedProject!.downVotes + selectedProject!.upVotes}", style: TextStyle(color: Colors.white, fontSize: 20),),
-                      minRadius: 20,
-                      maxRadius: 25,
+          left: 0.0,
+          right: 0.0,
+          bottom: 40,
+          duration: Duration(milliseconds: 200),
+          child: Container(
+            width: 100,
+            height: 250,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: EdgeInsets.all(20),
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      blurRadius: 20,
+                      offset: Offset.zero,
+                      color: Colors.grey.withOpacity(0.5),
+                    )],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
+                      child: CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: Text("${selectedProject!.downVotes + selectedProject!.upVotes}", style: TextStyle(color: Colors.white, fontSize: 20),),
+                        minRadius: 20,
+                        maxRadius: 25,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 20),
-                        padding: EdgeInsets.fromLTRB(0, 15, 5, 15),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                selectedProject?.name ?? "No marker selected",
-                                style: TextStyle(color: Colors.purple, fontSize: 17, fontWeight: FontWeight.bold),
-                              ),
-                              Spacer(),
-                              Text(
-                                selectedProject?.description ?? "No description available",
-                                maxLines: 2, overflow: TextOverflow.ellipsis
-                              )
-                            ]
+                    Expanded(
+                        child: InkWell(
+                          onTap: openProjectDetails,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 20),
+                            padding: EdgeInsets.fromLTRB(0, 15, 5, 15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    selectedProject?.name ?? "No marker selected",
+                                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 17, fontWeight: FontWeight.bold),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    selectedProject?.description ?? "No description available",
+                                    maxLines: 2, overflow: TextOverflow.ellipsis
+                                  )
+                                ]
+                            )
+                          )
                         )
-                      )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(15), 
-                      child: Icon(Icons.grade_rounded, color: Colors.yellow, size: 50,),
-                  )
-                ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(15),
+                        child: Icon(Icons.grade_rounded, color: Colors.yellow, size: 50,),
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ),
+            )
+          ),
     );
   }
 
