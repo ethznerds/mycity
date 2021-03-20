@@ -80,18 +80,18 @@ class _MyHomePageState extends State<MyHomePage> {
       //   title: Text("voteUp"),
       // ),
       appBar: NewGradientAppBar(
-        title: Text("voteUp"),
+        title: Text("mycity"),
         gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Theme.of(context).accentColor]),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _selectedIndex == 0 ? FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
         onPressed: openProjectEditor,
         child: const Icon(Icons.add)
-      ),
+      ) : null,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

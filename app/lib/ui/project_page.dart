@@ -1,4 +1,7 @@
 import 'package:app/models/project.dart';
+import 'package:app/models/user.dart';
+import 'package:app/ui/fund_project.dart';
+import 'package:app/utils/thumbs_up_down.dart';
 import 'package:flutter/material.dart';
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 
@@ -43,7 +46,12 @@ class _ProjectPageState extends State<ProjectPage> {
                         color: Theme.of(context).primaryColor,
                         fontSize: 18),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FundProject(project: widget.project, userModel: UserModel(),)));
+                  },
                   style: ButtonStyle(
                       shape: MaterialStateProperty.all<
                           RoundedRectangleBorder>(
@@ -78,6 +86,7 @@ class _ProjectPageState extends State<ProjectPage> {
             Center(child: Text(widget.project.description, textAlign: TextAlign.center,),),
             SizedBox(height: 50,),
 
+            ThumbsUpDown(),
 
           ],
         ),
