@@ -223,7 +223,7 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
       initials = initials.toUpperCase();
     }
     return CircleAvatar(
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: Theme.of(context).accentColor,
       child: Text(initials, style: TextStyle(color: Colors.white, fontSize: 60),),
       minRadius: 60,
     );
@@ -244,7 +244,7 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
             children: [
               Icon(
                 Icons.logout,
-                color: Colors.red,
+                color: Theme.of(context).accentColor,
                 size: 30,
               ),
               Text("Logout"),

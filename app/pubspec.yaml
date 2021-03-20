@@ -19,7 +19,7 @@ dependencies:
   provider: ^5.0.0
 
   fl_chart: ^0.20.1
-#  new_gradient_app_bar: ^0.1.5
+  new_gradient_app_bar: ^0.1.5
 
   google_maps_flutter: ^2.0.1
   location: ^4.1.1
