@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../utils/indicator.dart';
 
-
-
 /*  @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +32,12 @@ import '../utils/indicator.dart';
 class FundProjectState extends State {
   int touchedIndex = -1;*/
 
-
 class FundProject extends StatefulWidget {
   final UserModel userModel;
   final Project project;
 
-  const FundProject({Key? key, required this.userModel, required this.project}) : super(key: key);
+  const FundProject({Key? key, required this.userModel, required this.project})
+      : super(key: key);
 
   @override
   _FundProjectState createState() => _FundProjectState();
@@ -60,7 +58,8 @@ class _FundProjectState extends State<FundProject> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            Text("My Budget", style: TextStyle(fontSize: 15), textAlign: TextAlign.left),
+            Text("My Budget",
+                style: TextStyle(fontSize: 15), textAlign: TextAlign.left),
             _projectItem(widget.project, Theme.of(context).accentColor),
             getPage(),
           ],
@@ -71,9 +70,14 @@ class _FundProjectState extends State<FundProject> {
 
   Widget _projectItem(Project project, Color color) {
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Row(
         children: <Widget>[
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Container(
             width: 15,
             height: 15,
@@ -82,108 +86,150 @@ class _FundProjectState extends State<FundProject> {
               color: color,
             ),
           ),
-          SizedBox(width: 10,),
-          Text(project.name, style: TextStyle(fontSize: 16),),
-          Spacer(),
-          Text("15\$", style: TextStyle(fontSize: 16),),
-          SizedBox(width: 10,),
           SizedBox(
             width: 10,
-              height: 10,
-            child: IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {
+          ),
+          Text(
+            project.name,
+            style: TextStyle(fontSize: 16),
+          ),
+          Spacer(),
+          /*Text("15\$", style: TextStyle(fontSize: 16),),
+          SizedBox(width: 10,),
+          SizedBox(
+            width: 40,
+              height: 40,
+            child: IconButton(icon: Icon(Icons.add_circle_outline, size: 27,), onPressed: () {
 
             }),
           ),
 
           IconButton(icon: Icon(Icons.remove_circle_outline), onPressed: () {
 
-          }),
-          SizedBox(width: 10,),
+          }),*/
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            color: color,
+            child: Column(
+              children: <Widget>[
+                Card(
+                  child: Text(
+                    "15 \$",
+                    style: TextStyle(fontSize: 19),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                        icon: Icon(
+                          Icons.add_circle_outline,
+                          size: 27,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {}),
+                    IconButton(
+                        icon: Icon(
+                          Icons.add_circle_outline,
+                          size: 27,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {}),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 1,
+          ),
         ],
       ),
     );
   }
 
   Widget getPage() {
-   return AspectRatio(
-     aspectRatio: 1.3,
-     child: Card(
-       color: Colors.white,
-       child: Row(
-         children: <Widget>[
-           const SizedBox(
-             height: 18,
-           ),
-           Expanded(
-             child: AspectRatio(
-               aspectRatio: 1,
-               child: PieChart(
-                 PieChartData(
-                     pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                       setState(() {
-                         if (pieTouchResponse.touchInput is FlLongPressEnd ||
-                             pieTouchResponse.touchInput is FlPanEnd) {
-                           touchedIndex = -1;
-                         } else {
-                           touchedIndex = pieTouchResponse.touchedSectionIndex;
-                         }
-                       });
-                     }),
-                     borderData: FlBorderData(
-                       show: false,
-                     ),
-                     sectionsSpace: 0,
-                     centerSpaceRadius: 40,
-                     sections: showingSections()),
-               ),
-             ),
-           ),
-           Column(
-             mainAxisSize: MainAxisSize.max,
-             mainAxisAlignment: MainAxisAlignment.end,
-             crossAxisAlignment: CrossAxisAlignment.start,
-             children: const <Widget>[
-               Indicator(
-                 color: Color(0xff0293ee),
-                 text: 'First',
-                 isSquare: true,
-               ),
-               SizedBox(
-                 height: 4,
-               ),
-               Indicator(
-                 color: Color(0xfff8b250),
-                 text: 'Second',
-                 isSquare: true,
-               ),
-               SizedBox(
-                 height: 4,
-               ),
-               Indicator(
-                 color: Color(0xff845bef),
-                 text: 'Third',
-                 isSquare: true,
-               ),
-               SizedBox(
-                 height: 4,
-               ),
-               Indicator(
-                 color: Color(0xff13d38e),
-                 text: 'Fourth',
-                 isSquare: true,
-               ),
-               SizedBox(
-                 height: 18,
-               ),
-             ],
-           ),
-           const SizedBox(
-             width: 28,
-           ),
-         ],
-       ),
-     ),
-   );
+    return AspectRatio(
+      aspectRatio: 1.3,
+      child: Card(
+        color: Colors.white,
+        child: Row(
+          children: <Widget>[
+            const SizedBox(
+              height: 18,
+            ),
+            Expanded(
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: PieChart(
+                  PieChartData(
+                      pieTouchData:
+                          PieTouchData(touchCallback: (pieTouchResponse) {
+                        setState(() {
+                          if (pieTouchResponse.touchInput is FlLongPressEnd ||
+                              pieTouchResponse.touchInput is FlPanEnd) {
+                            touchedIndex = -1;
+                          } else {
+                            touchedIndex = pieTouchResponse.touchedSectionIndex;
+                          }
+                        });
+                      }),
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 40,
+                      sections: showingSections()),
+                ),
+              ),
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const <Widget>[
+                Indicator(
+                  color: Color(0xff0293ee),
+                  text: 'First',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xfff8b250),
+                  text: 'Second',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xff845bef),
+                  text: 'Third',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xff13d38e),
+                  text: 'Fourth',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 18,
+                ),
+              ],
+            ),
+            const SizedBox(
+              width: 28,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   List<PieChartSectionData> showingSections() {
@@ -199,7 +245,9 @@ class _FundProjectState extends State<FundProject> {
             title: '40%',
             radius: radius,
             titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
           );
         case 1:
           return PieChartSectionData(
@@ -208,7 +256,9 @@ class _FundProjectState extends State<FundProject> {
             title: '30%',
             radius: radius,
             titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
           );
         case 2:
           return PieChartSectionData(
@@ -217,7 +267,9 @@ class _FundProjectState extends State<FundProject> {
             title: '15%',
             radius: radius,
             titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
           );
         case 3:
           return PieChartSectionData(
@@ -226,7 +278,9 @@ class _FundProjectState extends State<FundProject> {
             title: '15%',
             radius: radius,
             titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
           );
         default:
           return PieChartSectionData(
@@ -235,12 +289,11 @@ class _FundProjectState extends State<FundProject> {
             title: '0%',
             radius: radius,
             titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
           );
       }
     });
   }
-
-
-
 }

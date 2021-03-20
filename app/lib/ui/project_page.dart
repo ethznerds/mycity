@@ -14,6 +14,7 @@ class _ProjectPageState extends State<ProjectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         title: Text(widget.project.name),
       ),
       body: SingleChildScrollView(
