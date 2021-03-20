@@ -31,8 +31,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 143, 148, 251),
-        accentColor: Color.fromARGB(255, 143, 148, 251),
+        // primaryColor: Color.fromARGB(255, 127, 40, 198),
+        // accentColor: Colors.teal,127
+        primaryColor: Color.fromARGB(255, 0, 131, 52),
+        accentColor: Color(0xFF587cc7),
       ),
       home: MyHomePage(title: 'VoteUp'),
     );
