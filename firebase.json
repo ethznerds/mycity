@@ -14,9 +14,6 @@
       "**/node_modules/**"
     ]
   },
-  "storage": {
-    "rules": "storage.rules"
-  },
   "emulators": {
     "functions": {
       "port": 5001
@@ -34,7 +31,5 @@
       "enabled": true
     }
   },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
-  }
+  "remoteconfig": {}
 }
