@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
 }
 
 
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -50,7 +49,18 @@ class _MyHomePageState extends State<MyHomePage> {
   static List<Widget> _widgetOptions = <Widget>[
     Vote(),
     AroundMe(),
-    Profile(),
+    Consumer<ApplicationState>(
+      builder: (context, appState, _) => Authentication(
+        email: appState.email,
+        loginState: appState.loginState,
+        startLoginFlow: appState.startLoginFlow,
+        verifyEmail: appState.verifyEmail,
+        signInWithEmailAndPassword: appState.signInWithEmailAndPassword,
+        cancelRegistration: appState.cancelRegistration,
+        registerAccount: appState.registerAccount,
+        signOut: appState.signOut,
+      ),
+    ),
   ];
 
   void _onItemTapped(int index) {
@@ -59,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  @override
+/*  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -67,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView(
         children: <Widget>[
-          Image.asset('assets/codelab.png'),
+          //Image.asset('assets/codelab.png'),
           SizedBox(height: 8),
           IconAndDetail(Icons.calendar_today, 'October 30'),
           IconAndDetail(Icons.location_city, 'San Francisco'),
@@ -113,9 +123,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
-  }
+  }*/
 
-  /*@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -143,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
     );
-  }*/
+  }
 }
 
 
