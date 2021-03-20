@@ -2,6 +2,7 @@ import 'package:app/models/app_state.dart';
 import 'package:app/models/user.dart';
 import 'package:app/ui/profile.dart';
 import 'package:app/ui/around_me.dart';
+import 'package:app/ui/project_editor.dart';
 import 'package:app/ui/vote.dart';
 import 'package:app/utils/widgets.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void openProjectEditor() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context)=>ProjectEditor())
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,6 +85,12 @@ class _MyHomePageState extends State<MyHomePage> {
       // ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.white,
+        onPressed: openProjectEditor,
+        child: const Icon(Icons.add)
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
