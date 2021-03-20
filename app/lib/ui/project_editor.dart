@@ -1,22 +1,49 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:app/models/project.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zefyr/zefyr.dart';
 
 class ProjectEditor extends StatefulWidget {
+
+  final Project project;
+
+  ProjectEditor(this.project);
+
   @override 
   _ProjectEditorState createState() => _ProjectEditorState();
 }
 
-class _ProjectEditorState extends State<ProjectEditor> {
+class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final projectsDb = FirebaseFirestore.instance.collection("projects");
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  late AnimationController animController;
+
   ZefyrController? _rtController;
   FocusNode? _focusNode;
   bool rtHasFocus = false;
+  bool showSpinner = false;
+  String? documentId;
+
+  _ProjectEditorState({
+    this.documentId
+  });
 
   @override
   void initState() {
+    animController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..addListener(() {
+      setState(() {});
+    });
+    animController.repeat(reverse: true);
     super.initState();
     final document = _loadDocument();
     _rtController = ZefyrController(document);
@@ -27,6 +54,35 @@ class _ProjectEditorState extends State<ProjectEditor> {
       });
     });
   }
+
+  void saveEntry() {
+    setState(() {
+      showSpinner = true;
+    });
+    widget.project.save(
+        titleController.text,
+        descriptionController.text,
+        null,
+        jsonEncode(_rtController!.document)
+    ).then((value) {
+      log("xxx Success");
+      setState(() {
+        showSpinner = false;
+      });
+    }).catchError((e){
+      log("xxx error occured");
+      setState(() {
+        showSpinner = false;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    animController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +96,7 @@ class _ProjectEditorState extends State<ProjectEditor> {
               Icons.save_rounded,
               color: Colors.white
             ),
-            onPressed: () {
-
-            },
+            onPressed: saveEntry,
           )
         ],
       ),
@@ -69,6 +123,7 @@ class _ProjectEditorState extends State<ProjectEditor> {
                                         children: [
                                            TextFormField(
                                              style: TextStyle(fontSize: 25),
+                                             controller: titleController,
                                              decoration: InputDecoration(
                                                hintText: "Enter a title",
                                                labelText: "Issue title",
@@ -77,6 +132,7 @@ class _ProjectEditorState extends State<ProjectEditor> {
                                            ),
                                            TextFormField(
                                              style: TextStyle(fontSize: 20),
+                                             controller: descriptionController,
                                              decoration: InputDecoration(
                                                  hintText: "Enter a short description",
                                                  labelText: "Short description",
@@ -95,7 +151,14 @@ class _ProjectEditorState extends State<ProjectEditor> {
                                 padding: EdgeInsets.only(left: 16, right: 16),
                                 //onLaunchUrl: _launchUrl,
                               ),
-                          ]
+                              if(!showSpinner) ElevatedButton(
+                                onPressed: saveEntry,
+                                child: Text("Save issue"),
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor)),
+                              ),
+                              if(showSpinner) CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))
+                            ]
                         )
                      )
                   ),

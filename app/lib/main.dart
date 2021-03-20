@@ -1,4 +1,5 @@
 import 'package:app/models/app_state.dart';
+import 'package:app/models/project.dart';
 import 'package:app/models/user.dart';
 import 'package:app/ui/profile.dart';
 import 'package:app/ui/around_me.dart';
@@ -17,6 +18,7 @@ import 'dart:async'; // new
 import 'package:cloud_firestore/cloud_firestore.dart'; // new
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => UserModel()),
@@ -28,18 +30,33 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // primaryColor: Color.fromARGB(255, 127, 40, 198),
-        // accentColor: Colors.teal,127
-        primaryColor: Color.fromARGB(255, 0, 131, 52),
-        accentColor: Color(0xFF587cc7),
-      ),
-      home: MyHomePage(title: 'VoteUp'),
+    return FutureBuilder(
+        future: _initialization,
+        builder: (context, snapshot) {
+          if(snapshot.hasError) {
+            return Text("Error");
+          }
+
+          if(snapshot.connectionState == ConnectionState.done) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                // primaryColor: Color.fromARGB(255, 127, 40, 198),
+                // accentColor: Colors.teal,127
+                primaryColor: Color.fromARGB(255, 0, 131, 52),
+                accentColor: Color(0xFF587cc7),
+              ),
+              home: MyHomePage(title: 'VoteUp'),
+            );
+          }
+
+          return Text("Loading...");
+        }
     );
   }
 }
@@ -67,9 +84,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void openProjectEditor() {
+  void openProjectEditor(Project? project) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context)=>ProjectEditor())
+        MaterialPageRoute(builder: (context)=>ProjectEditor(project ?? Project(null, "", "", null, Stage.initial, [], null)))
     );
   }
 
@@ -89,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
-        onPressed: openProjectEditor,
+        onPressed: ()=>openProjectEditor(null),
         child: const Icon(Icons.add)
       ),
       bottomNavigationBar: BottomNavigationBar(

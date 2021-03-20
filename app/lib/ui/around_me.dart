@@ -13,13 +13,13 @@ import '../utils/locationHelper.dart' as loc;
 
 Marker getCustomMarker(Project project, BitmapDescriptor? icon, void Function(String) cb) {
   return Marker(
-      markerId: MarkerId(project.documentId),
+      markerId: MarkerId(project.documentId ?? "newid"),
       position: LatLng(project.location?.latitude ?? 0, project.location?.longitude ?? 0),
       infoWindow: InfoWindow(
         title: project.name
       ),
       icon: icon ?? BitmapDescriptor.defaultMarker,
-    onTap: ()=>cb(project.documentId)
+    onTap: ()=>cb(project.documentId ?? "newid")
   );
 }
 

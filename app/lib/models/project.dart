@@ -9,21 +9,43 @@ enum Stage {
 }
 
 class Project {
-  final String documentId;
-  final String name;
-  final String description;
-  final AssetImage image;
+  String? documentId;
+  String name;
+  String description;
+  String? richtext;
+  AssetImage? image;
   //final Location location;
   GeoPoint? location;
-  final Stage stage;
-  final List<Proposal> proposals;
+  Stage stage;
+  List<Proposal> proposals;
 
   int upVotes = 0;
   int downVotes = 0;
   int funding = 0;
 
 
-  Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location);
+  Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location, [this.richtext]);
+
+  Future<void> save(String name, String description, GeoPoint? location, String? richtext) async {
+    final projectsDb = FirebaseFirestore.instance.collection("projects");
+    this.name = name;
+    this.description = description;
+    this.location = location;
+    this.richtext = richtext;
+
+    var value = {
+      "name": name,
+      "description": description,
+      "richtext": richtext,
+    };
+
+    if(documentId != null) {
+      return await projectsDb.doc(documentId).update(value);
+    } else {
+      var res = await projectsDb.add(value);
+      this.documentId = res.id;
+    }
+  }
 }
 
 List<Project> generateDummyProjects(){

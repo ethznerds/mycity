@@ -21,7 +21,7 @@ class _ProjectPageState extends State<ProjectPage> {
         child: Column(
           children: <Widget>[
             Card(
-              child: Image(image: widget.project.image,fit: BoxFit.cover),
+              child: Image(image: widget.project.image ?? AssetImage("assets/images/local_hero.jpg"),fit: BoxFit.cover),
               clipBehavior: Clip.antiAlias,
               margin: EdgeInsets.all(5),
               shape: RoundedRectangleBorder(
