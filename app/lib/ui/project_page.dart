@@ -1,5 +1,6 @@
 import 'package:app/models/project.dart';
 import 'package:flutter/material.dart';
+import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 
 class ProjectPage extends StatefulWidget {
   final Project project;
@@ -13,9 +14,9 @@ class _ProjectPageState extends State<ProjectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-
+      appBar: NewGradientAppBar(
         title: Text(widget.project.name),
+        gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Theme.of(context).accentColor]),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
