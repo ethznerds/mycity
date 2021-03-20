@@ -23,6 +23,14 @@ dependencies:
   google_maps_flutter: ^2.0.1
   location: ^4.1.1
 
+  quill_delta: ^2.0.0
+
+  zefyr:
+    git:
+      url: git@github.com:eymarkfr/zefyr.git
+      path: packages/zefyr
+      ref: 1.0-dev
+
   fluster:
     git:
       url: git@github.com:eymarkfr/fluster.git
