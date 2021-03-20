@@ -24,6 +24,10 @@ class UserModel extends ChangeNotifier {
     return true;
   }
 
+  bool loggedIn() {
+    return _is_logged_in;
+  }
+
   void logout() {
     this._firstName = "";
     this._lastName = "";
