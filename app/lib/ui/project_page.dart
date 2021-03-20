@@ -29,20 +29,11 @@ class _ProjectPageState extends State<ProjectPage> {
               ),
               elevation: 3.0,
             ),
-            SizedBox(height: 15,),
-             Row(
-                children: <Widget>[
-                  Expanded(
-                  child: Container(width: 50,),
-                  ),
-                  Expanded(child: Text(widget.project.description, textAlign: TextAlign.center,)),
-                ],
-              ),
-            Center(child: Text(widget.project.description, textAlign: TextAlign.center,),),
-            SizedBox(height: 50,),
+            SizedBox(height: 7,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                SizedBox(width: 15,),
                 TextButton(
                   child: Text(
                     "buy",
@@ -73,6 +64,18 @@ class _ProjectPageState extends State<ProjectPage> {
                 const SizedBox(width: 8),
               ],
             ),
+            SizedBox(height: 7,),
+             Row(
+                children: <Widget>[
+                  Expanded(
+                  child: Container(width: 50,),
+                  ),
+                  Expanded(child: Text(widget.project.description, textAlign: TextAlign.center,)),
+                ],
+              ),
+            Center(child: Text(widget.project.description, textAlign: TextAlign.center,),),
+            SizedBox(height: 50,),
+
 
           ],
         ),
