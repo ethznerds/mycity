@@ -21,6 +21,16 @@ dependencies:
   google_maps_flutter: ^2.0.1
   location: ^4.1.1
 
+  fluster:
+    git:
+      url: git@github.com:eymarkfr/fluster.git
+
+  # Cache manager
+  flutter_cache_manager:
+    git:
+      url: git@github.com:eymarkfr/flutter_cache_manager.git
+      path: flutter_cache_manager
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

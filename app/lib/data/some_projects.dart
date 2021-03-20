@@ -7,6 +7,6 @@ List<Proposal> _proposals1 = [
 ];
 
 List<Project> projects = [
- Project("New Playground", "Build a small playground next to the primary school. Build a small playground next to the primary school. Build a small playground next to the primary school.", AssetImage('assets/images/playground.jpg'), Stage.proposals, _proposals1),
+ Project("adfadf", "New Playground", "Build a small playground next to the primary school. Build a small playground next to the primary school. Build a small playground next to the primary school.", AssetImage('assets/images/playground.jpg'), Stage.proposals, _proposals1, null),
 ];
 

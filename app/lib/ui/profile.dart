@@ -49,7 +49,6 @@ class _ProfileWidget extends StatefulWidget{
   _ProfileWidgetState createState() => _ProfileWidgetState();
 }
 class _ProfileWidgetState extends State<_ProfileWidget> {
-  List<Project> dummyProjects = List.generate(20, (i) => new Project("dummy $i", "blujil kj kjh jh jhg jhfhgfjhk uo iu ou oi uo uiiuouoiu ui jkh jkh gjhghgfhgfghfhgf g fhfhgfhfhfhfgf yui yiu oyu yui yiuy io u yoiuyi y iy iy b $i", AssetImage(""), Stage.denied, []));
   ScrollController _scrollController = new ScrollController();
 
   @override
@@ -98,6 +97,7 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
   }
 
   Widget getProjects() {
+    var dummyProjects = generateDummyProjects();
     return Container(
       child: DefaultTabController(
         length: 2,
