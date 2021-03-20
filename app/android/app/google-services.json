@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "274912792343",
+    "firebase_url": "https://starthack-cedf4-default-rtdb.firebaseio.com",
+    "project_id": "starthack-cedf4",
+    "storage_bucket": "starthack-cedf4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274912792343:android:8e3bf24651f9f6a5a3b152",
+        "android_client_info": {
+          "package_name": "com.hoenggerberg.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274912792343-hermtd5i5n5m25sj19n4vcmj0b5o2dv2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQOrr7W4pCbisdMn-dDRiCdGjaMw-cjls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "274912792343-hermtd5i5n5m25sj19n4vcmj0b5o2dv2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
