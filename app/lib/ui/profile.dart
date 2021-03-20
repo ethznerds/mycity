@@ -83,9 +83,9 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
               SizedBox(height: 20,),
               Text(widget.userDisplayName, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),),
               SizedBox(height: 20,),
-              userAchievements(),
+              userAchievements(context),
               SizedBox(height: 20,),
-              getProjects()
+              getProjects(context)
             ],
           ),
         ),
@@ -96,7 +96,7 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
     widget.signOut();
   }
 
-  Widget getProjects() {
+  Widget getProjects(final BuildContext context) {
     var dummyProjects = generateDummyProjects();
     return Container(
       child: DefaultTabController(
@@ -109,7 +109,7 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
                 Tab(text: "Ongoing projects",),
                 Tab(text: "Past projects",)
               ],
-              indicatorColor: Colors.deepPurpleAccent,
+              indicatorColor: Theme.of(context).primaryColor,
               labelColor: Colors.black,
               unselectedLabelColor: Colors.black26,)
             ),
@@ -144,8 +144,8 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
     );
   }
 
-  Widget userAchievements() {
-    const numberStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.deepPurpleAccent);
+  Widget userAchievements(final BuildContext context) {
+    var numberStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Theme.of(context).primaryColor);
     const textStyle = TextStyle(fontSize: 15);
     return Container(
       child: Column(
