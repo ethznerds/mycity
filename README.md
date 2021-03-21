@@ -1,11 +1,17 @@
 # Project Hoenggerberg presenting mycity
 
+## Pitch
+[Pitch Video](https://youtu.be/NLloPttvuBc)
+
 ## App Download
 [APK Download](https://drive.google.com/file/d/1LxJz_TxOY1RHyw1U-DNAfZUCI6txRv3c/view?usp=sharing)
 The App is also in this repository
 
 ## App Tutorial
 [Tutorial Video](https://drive.google.com/file/d/1z-TSvOg7sYJ5FG9NdPjAWQ-gRqhZWpVK/view?usp=sharing)
+
+## Pitch Slides
+[]()
 
 
 
