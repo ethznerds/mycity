@@ -1,5 +1,6 @@
-import 'package:app/data/some_projects.dart';
+import 'package:app/models/project.dart';
 import 'package:app/ui/project_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Vote extends StatefulWidget {
@@ -8,14 +9,28 @@ class Vote extends StatefulWidget {
 }
 
 class _VoteState extends State<Vote> {
-  final itemsList = List<String>.generate(projects.length - 1, (i) => "Item ${i + 1}");
 
   @override
   Widget build(BuildContext context) {
-    return generateItemsList();
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("projects").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if(snapshot.hasData) {
+            return generateItemsList(
+                snapshot.data!.docs.map(Project.mapDocumentToProject).toList()
+            );
+          }
+
+          if(snapshot.hasError) {
+            return Text("Error!");
+          }
+
+          return Text("Loading....");
+        }
+    );
   }
 
-  ListView generateItemsList() {
+  ListView generateItemsList(List<Project> projects) {
     return ListView.builder(
       itemCount: projects.length,
       itemBuilder: (context, index) {
@@ -32,46 +47,12 @@ class _VoteState extends State<Vote> {
           confirmDismiss: (direction) async {
             //DOWN
             if (direction == DismissDirection.endToStart) {
-
-
               Future.delayed(const Duration(milliseconds: 500), () {
-                setState(() {
-                  itemsList.removeAt(index);
-                });
+                // setState(() {
+                //   itemsList.removeAt(index);
+                // });
               });
-              /*final bool res = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Text(
-                          "Are you sure you want to delete ${itemsList[index]}?"),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        FlatButton(
-                          child: Text(
-                            "Delete",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          onPressed: () {
-                            // TODO: Delete the item from DB etc..
-                            setState(() {
-                              itemsList.removeAt(index);
-                            });
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  });
-              return res;*/
+
             } else {
               // TODO: Navigate to edit page;
             }

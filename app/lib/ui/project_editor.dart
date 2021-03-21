@@ -1,12 +1,23 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:io';
+import 'dart:math';
 
 import 'package:app/models/project.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fbs;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image/image.dart' as ImageLibrary;
+import 'package:image_picker/image_picker.dart';
 import 'package:zefyr/zefyr.dart';
+
+const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+Random _rnd = Random();
+
+String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+    length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
 class ProjectEditor extends StatefulWidget {
 
@@ -23,7 +34,9 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
   final projectsDb = FirebaseFirestore.instance.collection("projects");
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final imagePicker = ImagePicker();
   late AnimationController animController;
+  File? _image;
 
   ZefyrController? _rtController;
   FocusNode? _focusNode;
@@ -55,7 +68,24 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
     });
   }
 
-  void saveEntry() {
+  Future<String> prepareImageForUpload(File file) async {
+    var image = ImageLibrary.decodeImage(file.readAsBytesSync());
+    if(image == null) return "";
+    // var thumbnail = ImageLibrary.copyResize(image, width: 720);
+    // return base64Encode(ImageLibrary.encodeJpg(thumbnail, quality: 50));
+    var storageReference = fbs.FirebaseStorage.instance
+      .ref()
+      .child("images")
+      .child('/${getRandomString(30)}.jpg');
+    final metadata = fbs.SettableMetadata(
+        contentType: 'image/jpeg',
+        customMetadata: {'picked-file-path': file.path});
+    var uploadTask = storageReference.putData(file.readAsBytesSync(), metadata);
+    var result = await uploadTask;
+    return result.ref.getDownloadURL();
+  }
+
+  void saveEntry() async {
     setState(() {
       showSpinner = true;
     });
@@ -63,14 +93,14 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
         titleController.text,
         descriptionController.text,
         null,
-        jsonEncode(_rtController!.document)
+        jsonEncode(_rtController!.document),
+        _image == null ? null : await prepareImageForUpload(_image!)
     ).then((value) {
-      log("xxx Success");
       setState(() {
         showSpinner = false;
       });
     }).catchError((e){
-      log("xxx error occured");
+      dev.log("xxx error occurred");
       setState(() {
         showSpinner = false;
       });
@@ -81,6 +111,17 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
   void dispose() {
     animController.dispose();
     super.dispose();
+  }
+
+  void getImage() async {
+    final pickedFile = await imagePicker.getImage(source: ImageSource.camera);
+    setState(() {
+      if(pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        dev.log("No file selected");
+      }
+    });
   }
 
 
@@ -143,6 +184,18 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
                                       ),
                                     ),
                               ),
+                              SizedBox(height: 10,),
+                              if(_image == null) ElevatedButton.icon(
+                                  onPressed: getImage,
+                                  icon: Icon(
+                                    Icons.image_outlined
+                                  ),
+                                  label: Padding(
+                                    padding: EdgeInsets.all(10),
+                                      child:Text("Add image", style: TextStyle(fontSize: 20),)
+                                  )
+                              ),
+                              if(_image != null) Image.file(_image!, height: 150,),
                               ZefyrField(
                                 controller: _rtController,
                                 focusNode: _focusNode,

@@ -15,8 +15,10 @@ dependencies:
     sdk: flutter
 
   cloud_firestore: ^1.0.1
+  firebase_storage: ^8.0.0
   firebase_auth: ^1.0.1
   provider: ^5.0.0
+  firebase_core: ^1.0.1
 
   fl_chart: ^0.20.1
   new_gradient_app_bar: ^0.1.5
@@ -37,6 +39,8 @@ dependencies:
       url: git@github.com:eymarkfr/fluster.git
 
   fluttertoast: ^7.1.6
+  image_picker: ^0.7.3
+  image: ^3.0.2
 
   # Cache manager
   flutter_cache_manager:

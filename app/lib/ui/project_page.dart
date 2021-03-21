@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:app/models/project.dart';
 import 'package:app/models/user.dart';
 import 'package:app/ui/fund_project.dart';
@@ -14,6 +18,11 @@ class ProjectPage extends StatefulWidget {
 }
 
 class _ProjectPageState extends State<ProjectPage> {
+
+  Image displayImage(String url) {
+    return Image.network(url, fit: BoxFit.cover, height: 200,);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +35,7 @@ class _ProjectPageState extends State<ProjectPage> {
         child: Column(
           children: <Widget>[
             Card(
-              child: Image(image: widget.project.image ?? AssetImage("assets/images/local_hero.jpg"),fit: BoxFit.cover),
+              child: displayImage(widget.project.image ?? ""),
               clipBehavior: Clip.antiAlias,
               margin: EdgeInsets.all(5),
               shape: RoundedRectangleBorder(
