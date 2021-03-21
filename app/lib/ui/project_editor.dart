@@ -15,6 +15,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:image/image.dart' as ImageLibrary;
 import 'package:image_picker/image_picker.dart';
+import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 import 'package:zefyr/zefyr.dart';
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -154,17 +155,9 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
+      appBar: NewGradientAppBar(
         title: Text("Create a new issue"),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.save_rounded,
-              color: Colors.white
-            ),
-            onPressed: saveEntry,
-          )
-        ],
+        gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Theme.of(context).accentColor]),
       ),
       body: Padding(
         padding: const EdgeInsets.all(0),
