@@ -64,7 +64,7 @@ class Project {
         doc['image'],
         Stage.initial,
         [],
-        null,
+        doc['location'],
         doc['sustainability'] ?? false,
         doc['education'] ?? false,
         doc['culture'] ?? false,

@@ -5,6 +5,7 @@ import 'package:app/models/project.dart';
 import 'package:app/ui/project_page.dart';
 import 'package:app/utils/map/map_helper.dart';
 import 'package:app/utils/map/map_marker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluster/fluster.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,12 +26,11 @@ Marker getCustomMarker(Project project, BitmapDescriptor? icon, void Function(St
 
 class AroundMe extends StatefulWidget {
   @override
-  _AroundMeState createState() => _AroundMeState(projects: generateDummyProjects()); //TODO add consumer
+  _AroundMeState createState() => _AroundMeState(); //TODO add consumer
 }
 
 class _AroundMeState extends State<AroundMe> {
   final Completer<GoogleMapController> _controller = Completer();
-  final List<Project> projects;
   Project? selectedProject;
 
   BitmapDescriptor? icon;
@@ -41,9 +41,7 @@ class _AroundMeState extends State<AroundMe> {
     });
   }
 
-  _AroundMeState({
-    required this.projects
-  }) {
+  _AroundMeState() {
     BitmapDescriptor.fromAssetImage(
         ImageConfiguration(devicePixelRatio: 2.5),
         "assets/images/marker.png")
@@ -51,7 +49,7 @@ class _AroundMeState extends State<AroundMe> {
           .catchError((e){log(e.toString());});
   }
 
-  void handleMarkerSelect(String documentId) {
+  void handleMarkerSelect(String documentId, List<Project> projects) {
     setState(() {
       selectedProject = projects.firstWhere((element) => element.documentId == documentId);
     });
@@ -69,11 +67,11 @@ class _AroundMeState extends State<AroundMe> {
     });
   }
 
-  Widget getMap() {
+  Widget getMap(List<Project> projects) {
     return GoogleMap(
       mapType: MapType.normal,
       initialCameraPosition: _initialPos,
-      markers: Set.from(projects.map((p)=>getCustomMarker(p, icon, handleMarkerSelect))),
+      markers: Set.from(projects.map((p)=>getCustomMarker(p, icon, (String docId)=>handleMarkerSelect(docId, projects)))),
       onMapCreated: (GoogleMapController controller) {
         _controller.complete(controller);
       },
@@ -170,10 +168,29 @@ class _AroundMeState extends State<AroundMe> {
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("projects").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if(snapshot.hasData) {
+            var projects = snapshot.data!.docs.map(Project.mapDocumentToProject).toList();
+            log("Number of projects: ${projects.length}");
+            log("Number of projects: ${projects[0].location!.longitude}");
+            return getMainContent(context, projects);
+          }
+          if(snapshot.hasError) {
+            return Text("Error!");
+          }
+
+          return Text("Loading....");
+        }
+    );
+  }
+
+  Widget getMainContent(BuildContext context, List<Project> projects) {
     return new Scaffold(
       body: Stack(
         children: [
-          getMap(),
+          getMap(projects),
           if(selectedProject != null) getInfoPanel(),
         ],
       ),
