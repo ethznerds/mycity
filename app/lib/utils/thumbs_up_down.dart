@@ -17,8 +17,8 @@ class _ThumbsUpDownState extends State<ThumbsUpDown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
-      height: 200,
+      width: 100,
+      height: 40,
       child: Row(
         children: <Widget>[
           _getThumbButton(Icons.thumb_up, upDownOrNone.up, Colors.green),
@@ -39,11 +39,25 @@ class _ThumbsUpDownState extends State<ThumbsUpDown> {
       onTap: () {
         if(thumbState == thumb) {
           setState(() {
-            thumbState == upDownOrNone.none;
+            thumbState = upDownOrNone.none;
+            if (thumb == upDownOrNone.up)
+              ups--;
+            else
+              downs--;
           });
         } else {
           setState(() {
-            thumbState == thumb;
+            if (thumb == upDownOrNone.up) {
+              ups++;
+              if (thumbState != upDownOrNone.none)
+              downs--;
+            }
+            else {
+              if (thumbState != upDownOrNone.none)
+              ups--;
+              downs++;
+            }
+            thumbState = thumb;
           });
         }
       },

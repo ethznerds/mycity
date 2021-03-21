@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         future: _initialization,
         builder: (context, snapshot) {
           if(snapshot.hasError) {
-            return Text("Error");
+            return Text("Error",  textDirection: TextDirection.ltr);
           }
 
           if(snapshot.connectionState == ConnectionState.done) {
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
             );
           }
 
-          return Text("Loading...");
+          return Text("Loading...",  textDirection: TextDirection.ltr);
         }
     );
   }

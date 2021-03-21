@@ -3,6 +3,7 @@ import 'package:app/models/user.dart';
 import 'package:app/ui/fund_project.dart';
 import 'package:app/ui/fund_project2.dart';
 import 'package:app/ui/project_page.dart';
+import 'package:app/utils/thumbs_up_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
@@ -106,16 +107,7 @@ class _ProjectItemState extends State<ProjectItem> {
                                               .primaryColor)))),
                         ),
                         Spacer(),
-                        IconButton(
-                          icon: Icon(Icons.share_outlined),
-                          onPressed: () {},
-                        ),
-                        const SizedBox(width: 8),
-                        IconButton(
-                          icon: Icon(Icons.star_border),
-                          onPressed: () {},
-                        ),
-                        const SizedBox(width: 8),
+                        ThumbsUpDown(),
                       ],
                     ),
                   ],

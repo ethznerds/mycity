@@ -9,6 +9,7 @@ class Vote extends StatefulWidget {
 
 class _VoteState extends State<Vote> {
   final itemsList = List<String>.generate(20, (i) => "Item ${i + 1}");
+
   @override
   Widget build(BuildContext context) {
     return generateItemsList();
@@ -24,14 +25,22 @@ class _VoteState extends State<Vote> {
               onTap: () {
                 print("${itemsList[index]} clicked");
               },
-              child: ProjectItem(project: projects[0],)
-          ),
+              child: ProjectItem(
+                project: projects[0],
+              )),
           background: slideRightBackground(),
           secondaryBackground: slideLeftBackground(),
           confirmDismiss: (direction) async {
             //DOWN
             if (direction == DismissDirection.endToStart) {
-              final bool res = await showDialog(
+
+
+              Future.delayed(const Duration(milliseconds: 500), () {
+                setState(() {
+                  itemsList.removeAt(index);
+                });
+              });
+              /*final bool res = await showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
@@ -63,7 +72,7 @@ class _VoteState extends State<Vote> {
                       ],
                     );
                   });
-              return res;
+              return res;*/
             } else {
               // TODO: Navigate to edit page;
             }
