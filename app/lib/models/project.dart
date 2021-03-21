@@ -82,8 +82,8 @@ class Project {
         doc['culture'] ?? false,
         doc['cost'] ?? -1,
         doc['richtext'],
-        (doc['upVotes'] as List).cast<String>().toList(),
-        (doc['downVotes'] as List).cast<String>().toList()
+        ((doc['upVotes'] ?? []) as List).cast<String>().toList(),
+        ((doc['downVotes'] ?? []) as List).cast<String>().toList()
     );
   }
 }

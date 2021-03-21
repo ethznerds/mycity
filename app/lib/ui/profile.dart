@@ -4,6 +4,8 @@ import 'package:app/models/app_state.dart';
 import 'package:app/models/project.dart';
 import 'package:app/models/user.dart';
 import 'package:app/ui/login.dart';
+import 'package:app/ui/project_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -85,8 +87,23 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
               SizedBox(height: 20,),
               userAchievements(context),
               SizedBox(height: 20,),
-              getProjects(context)
-            ],
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection("projects").snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if(snapshot.hasData) {
+                    return getProjects(
+                      context,
+                        snapshot.data!.docs.map(Project.mapDocumentToProject).toList()
+                    );
+                  }
+
+                  if(snapshot.hasError) {
+                    return Text("Error!");
+                  }
+
+                  return Text("Loading....");
+                }
+              )],
           ),
         ),
     );
@@ -96,8 +113,8 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
     widget.signOut();
   }
 
-  Widget getProjects(final BuildContext context) {
-    var dummyProjects = generateDummyProjects();
+  Widget getProjects(final BuildContext context, List<Project> projects) {
+    var currentUser = FirebaseAuth.instance.currentUser;
     return Container(
       child: DefaultTabController(
         length: 2,
@@ -119,8 +136,12 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
                 Align(
                   alignment: Alignment.topCenter,
                   child: TabBarView(children: [
-                    buildProjectListView(dummyProjects),
-                    buildProjectListView(dummyProjects),
+                    buildProjectListView(projects.where(
+                            (element) {
+                              return element.upVotes.contains(currentUser?.uid);
+                            }
+                    ).toList()),
+                    buildProjectListView([]),
                   ])
                 )
             )
@@ -131,13 +152,23 @@ class _ProfileWidgetState extends State<_ProfileWidget> {
   }
 
   Widget buildProjectListView(List<Project> projects) {
+    if(projects.length == 0) {
+      projects.add(Project("dummy", "No items available", "It seems there are not items for this category", "", Stage.initial, [], null, false, false, false, -2));
+    }
     return ListView.builder(
       itemCount: projects.length,
       itemBuilder: (context, index) {
         return ListTile(
           title: Text(projects[index].name),
           subtitle: Text(projects[index].description, maxLines: 2, overflow: TextOverflow.ellipsis),
-          onTap: () {/*TODO open project */},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProjectPage(
+                      project: projects[index],
+                    )));
+          },
         );
       },
       controller: _scrollController,
