@@ -25,7 +25,8 @@ void main() async {
   await Hive.openBox('budget');
   //ugly, remove as soon as possible
   await Hive.openBox('keyToName');
-  Hive.box('budget').put('wallet', 16);
+  if (Hive.box('budget') == null)
+    Hive.box('budget').put('wallet', 10);
 
   WidgetsFlutterBinding.ensureInitialized();
 
