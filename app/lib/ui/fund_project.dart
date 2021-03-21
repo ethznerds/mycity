@@ -26,6 +26,7 @@ class _FundProjectState extends State<FundProject> {
   void initState() {
     if (Hive.box('budget').get(widget.project.documentId) == null)
       Hive.box('budget').put(widget.project.documentId, 0);
+    Hive.box('keyToName').put(widget.project.documentId, widget.project.name);
     super.initState();
   }
 
@@ -35,7 +36,11 @@ class _FundProjectState extends State<FundProject> {
       Theme.of(context).primaryColor,
       Theme.of(context).accentColor,
       Colors.grey,
-      Colors.blueGrey
+      Colors.blueGrey,
+      Colors.black,
+      Colors.red,
+      Colors.lightGreen,
+      Colors.pink,
     ];
 
     return Scaffold(
@@ -67,6 +72,14 @@ class _FundProjectState extends State<FundProject> {
               values.add(i.toDouble());
             }
 
+            List<Widget> otherProjects = [];
+            for (int i=2; i<keys.length; i++) {
+              otherProjects.add(_projectItem(
+                  keys[i], Hive.box('keyToName').get(keys[i]) ?? "x", _colors[i], FontWeight.normal));
+            }
+
+            Widget col = Column(children: otherProjects,);
+
             return Column(
               children: <Widget>[
                 SizedBox(
@@ -74,7 +87,8 @@ class _FundProjectState extends State<FundProject> {
                 ),
                 _myBudget(Theme.of(context).primaryColor),
                 _projectItem(
-                    widget.project, Theme.of(context).accentColor, FontWeight.bold),
+                    widget.project.documentId ?? "", widget.project.name, Theme.of(context).accentColor, FontWeight.bold),
+                col,
                 Container(
                   width: 400,
                   height: 400,
@@ -108,10 +122,10 @@ class _FundProjectState extends State<FundProject> {
     );
   }
 
-  Widget _projectItem(Project project, Color color, FontWeight fontWeight) {
+  Widget _projectItem(String id, String name, Color color, FontWeight fontWeight) {
     var box = Hive.box('budget');
-    if (box.get(project.documentId) == null || box.get(project.documentId) == 0)
-      box.put(project.documentId, 0);
+    if (box.get(id) == null || box.get(id) == 0)
+      box.put(id, 0);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -135,7 +149,7 @@ class _FundProjectState extends State<FundProject> {
           Container(
             width: 190,
             child: Text(
-              project.name,
+              name,
               style: TextStyle(fontSize: 16, fontWeight: fontWeight),
             ),
           ),
@@ -149,7 +163,7 @@ class _FundProjectState extends State<FundProject> {
               children: <Widget>[
                 Card(
                   child: Text(
-                    box.get(project.documentId).toString() + " \$",
+                    box.get(id).toString() + " \$",
                     style: TextStyle(fontSize: 19),
                   ),
                 ),
@@ -163,7 +177,7 @@ class _FundProjectState extends State<FundProject> {
                         ),
                         onPressed: () {
                           if (box.get('wallet') >= 1) {
-                            box.put(project.documentId, box.get(project.documentId) + 1);
+                            box.put(id, box.get(id) + 1);
                             box.put('wallet', box.get('wallet') - 1);
                           }
                         }),
@@ -174,8 +188,8 @@ class _FundProjectState extends State<FundProject> {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          if (box.get(project.documentId) >= 1) {
-                            box.put(project.documentId, box.get(project.documentId) - 1);
+                          if (box.get(id) >= 1) {
+                            box.put(id, box.get(id) - 1);
                             box.put('wallet', box.get('wallet') + 1);
                           }
                         }),
@@ -235,88 +249,7 @@ class _FundProjectState extends State<FundProject> {
     );
   }
 
-  // Widget getPage() {
-  //   return AspectRatio(
-  //     aspectRatio: 1.3,
-  //     child: Card(
-  //       color: Colors.white,
-  //       child: Row(
-  //         children: <Widget>[
-  //           const SizedBox(
-  //             height: 18,
-  //           ),
-  //           Expanded(
-  //             child: AspectRatio(
-  //               aspectRatio: 1,
-  //               child: PieChart(
-  //                 PieChartData(
-  //                     pieTouchData:
-  //                         PieTouchData(touchCallback: (pieTouchResponse) {
-  //                       setState(() {
-  //                         if (pieTouchResponse.touchInput is FlLongPressEnd ||
-  //                             pieTouchResponse.touchInput is FlPanEnd) {
-  //                           touchedIndex = -1;
-  //                         } else {
-  //                           touchedIndex = pieTouchResponse.touchedSectionIndex;
-  //                         }
-  //                       });
-  //                     }),
-  //                     borderData: FlBorderData(
-  //                       show: false,
-  //                     ),
-  //                     sectionsSpace: 0,
-  //                     centerSpaceRadius: 40,
-  //                     sections: showingSections()),
-  //               ),
-  //             ),
-  //           ),
-  //           Column(
-  //             mainAxisSize: MainAxisSize.max,
-  //             mainAxisAlignment: MainAxisAlignment.end,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: const <Widget>[
-  //               Indicator(
-  //                 color: Color(0xff0293ee),
-  //                 text: 'First',
-  //                 isSquare: true,
-  //               ),
-  //               SizedBox(
-  //                 height: 4,
-  //               ),
-  //               Indicator(
-  //                 color: Color(0xfff8b250),
-  //                 text: 'Second',
-  //                 isSquare: true,
-  //               ),
-  //               SizedBox(
-  //                 height: 4,
-  //               ),
-  //               Indicator(
-  //                 color: Color(0xff845bef),
-  //                 text: 'Third',
-  //                 isSquare: true,
-  //               ),
-  //               SizedBox(
-  //                 height: 4,
-  //               ),
-  //               Indicator(
-  //                 color: Color(0xff13d38e),
-  //                 text: 'Fourth',
-  //                 isSquare: true,
-  //               ),
-  //               SizedBox(
-  //                 height: 18,
-  //               ),
-  //             ],
-  //           ),
-  //           const SizedBox(
-  //             width: 28,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+
 
   List<PieChartSectionData> showingSections(
       int size, List<Color> colors, List<double> percents) {
@@ -334,63 +267,7 @@ class _FundProjectState extends State<FundProject> {
             fontWeight: FontWeight.bold,
             color: const Color(0xffffffff)),
       );
-      // switch (i) {
-      //   case 0:
-      //     return PieChartSectionData(
-      //       color: const Color(0xff0293ee),
-      //       value: 40,
-      //       title: '40%',
-      //       radius: radius,
-      //       titleStyle: TextStyle(
-      //           fontSize: fontSize,
-      //           fontWeight: FontWeight.bold,
-      //           color: const Color(0xffffffff)),
-      //     );
-      //   case 1:
-      //     return PieChartSectionData(
-      //       color: const Color(0xfff8b250),
-      //       value: 30,
-      //       title: '30%',
-      //       radius: radius,
-      //       titleStyle: TextStyle(
-      //           fontSize: fontSize,
-      //           fontWeight: FontWeight.bold,
-      //           color: const Color(0xffffffff)),
-      //     );
-      //   case 2:
-      //     return PieChartSectionData(
-      //       color: const Color(0xff845bef),
-      //       value: 15,
-      //       title: '15%',
-      //       radius: radius,
-      //       titleStyle: TextStyle(
-      //           fontSize: fontSize,
-      //           fontWeight: FontWeight.bold,
-      //           color: const Color(0xffffffff)),
-      //     );
-      //   case 3:
-      //     return PieChartSectionData(
-      //       color: const Color(0xff13d38e),
-      //       value: 15,
-      //       title: '15%',
-      //       radius: radius,
-      //       titleStyle: TextStyle(
-      //           fontSize: fontSize,
-      //           fontWeight: FontWeight.bold,
-      //           color: const Color(0xffffffff)),
-      //     );
-      //   default:
-      //     return PieChartSectionData(
-      //       color: const Color(0xff13d38e),
-      //       value: 0,
-      //       title: '0%',
-      //       radius: radius,
-      //       titleStyle: TextStyle(
-      //           fontSize: fontSize,
-      //           fontWeight: FontWeight.bold,
-      //           color: const Color(0xffffffff)),
-      //     );
-      // }
+
     });
   }
 }

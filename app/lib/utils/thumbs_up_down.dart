@@ -59,7 +59,7 @@ class _ThumbsUpDownState extends State<ThumbsUpDown> {
             child: Row(
               children: <Widget>[
                 Icon(iconData, color: highlight ? activeColor : Colors.black,),
-                Text(add == 1 ? project.upVotes.length.toString() : project.downVotes.length.toString(),)
+                Text(add == 1 ? project.upVotes.length.toString() : project.downVotes.length.toString(),style: TextStyle(fontSize: 18),)
               ],
             ),
             onTap: () {

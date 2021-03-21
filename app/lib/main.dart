@@ -23,7 +23,11 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('vote');
   await Hive.openBox('budget');
-  Hive.box('budget').put('wallet', 16);
+  //ugly, remove as soon as possible
+  await Hive.openBox('keyToName');
+  if (Hive.box('budget') == null)
+    Hive.box('budget').put('wallet', 10);
+
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MultiProvider(
