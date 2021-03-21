@@ -64,67 +64,67 @@ class _ProjectItemState extends State<ProjectItem> {
                         )
                       : Container(),
                   SizedBox(
-                    height: 70,
+                    height: 30,
                   ),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.only(left: 15),
-                width: 300,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      widget.project.name,
-                      style: TextStyle(fontSize: 17),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      widget.project.description,
-                      softWrap: true,
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        TextButton(
-                          child: Text(
-                            "fund",
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 18),
+              Expanded(child: Container(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        widget.project.name,
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        widget.project.description,
+                        softWrap: true,
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          TextButton(
+                            child: Text(
+                              "fund",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 18),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FundProject(
+                                            project: widget.project,
+                                            userModel: UserModel(),
+                                          )));
+                            },
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(11.0),
+                                        side: BorderSide(
+                                            color: Theme.of(context)
+                                                .primaryColor)))),
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FundProject(
-                                          project: widget.project,
-                                          userModel: UserModel(),
-                                        )));
-                          },
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(11.0),
-                                      side: BorderSide(
-                                          color: Theme.of(context)
-                                              .primaryColor)))),
-                        ),
-                        Spacer(),
-                        thumbsWrapper(),
-                      ],
-                    ),
-                  ],
+                          Spacer(),
+                          thumbsWrapper(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              )
             ],
           ),
 
