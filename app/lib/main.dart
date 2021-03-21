@@ -23,6 +23,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('vote');
   await Hive.openBox('budget');
+  Hive.box('budget').put('wallet', 16);
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MultiProvider(
