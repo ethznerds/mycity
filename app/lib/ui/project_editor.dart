@@ -342,7 +342,7 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
 
   NotusDocument _loadDocument() {
     final json =
-        r'[{"insert":"Enter details here"},{"insert":"\n","attributes":{"heading":2}},{"insert":{"_type":"hr","_inline":false}},{"insert":"\n"},{"insert":"Multiple format options are available\n"}]';
+        r'[{"insert":"Richtext text editor"},{"insert":"\n","attributes":{"heading":2}},{"insert":"\n"},{"insert":"Here you can add additional informations supporting your case. Just start by removing this placeholder!\n"}]';
     final document = NotusDocument.fromJson(jsonDecode(json));
     return document;
   }

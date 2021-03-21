@@ -187,8 +187,6 @@ class _ProjectItemState extends State<ProjectItem> {
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if(snapshot.hasData) {
             var project = Project.mapDocumentToProject(snapshot.data!);
-            //var project = Project("", "", "", "", Stage.initial, [], null, false, false, false, 0);
-            log("hekjhkjhkhkre ${project.downVotes.length}");
             return ThumbsUpDown(project: project,);
           }
 
