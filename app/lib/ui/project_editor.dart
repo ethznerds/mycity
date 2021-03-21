@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:app/models/project.dart';
 import 'package:app/utils/locationHelper.dart';
@@ -76,7 +77,7 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
   Future<String> prepareImageForUpload(File file) async {
     var image = ImageLibrary.decodeImage(file.readAsBytesSync());
     if(image == null) return "";
-    // var thumbnail = ImageLibrary.copyResize(image, width: 720);
+    var thumbnail = ImageLibrary.copyResize(image, width: 720);
     // return base64Encode(ImageLibrary.encodeJpg(thumbnail, quality: 50));
     var storageReference = fbs.FirebaseStorage.instance
       .ref()
@@ -85,7 +86,7 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
     final metadata = fbs.SettableMetadata(
         contentType: 'image/jpeg',
         customMetadata: {'picked-file-path': file.path});
-    var uploadTask = storageReference.putData(file.readAsBytesSync(), metadata);
+    var uploadTask = storageReference.putData(Uint8List.fromList(ImageLibrary.encodeJpg(thumbnail, quality: 70)), metadata);
     var result = await uploadTask;
     return result.ref.getDownloadURL();
   }
