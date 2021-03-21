@@ -7,6 +7,8 @@ import 'package:app/ui/project_editor.dart';
 import 'package:app/ui/vote.dart';
 import 'package:app/utils/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +19,12 @@ import 'utils/authentication.dart'; // new
 import 'dart:async'; // new
 import 'package:cloud_firestore/cloud_firestore.dart'; // new
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('vote');
+  await Hive.openBox('budget');
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => UserModel()),

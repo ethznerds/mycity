@@ -116,7 +116,7 @@ class _ProjectItemState extends State<ProjectItem> {
                                               .primaryColor)))),
                         ),
                         Spacer(),
-                        ThumbsUpDown(),
+                        ThumbsUpDown(project: widget.project,),
                       ],
                     ),
                   ],
