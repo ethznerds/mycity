@@ -91,10 +91,14 @@ class _FundProjectState extends State<FundProject> {
           SizedBox(
             width: 10,
           ),
-          Text(
-            project.name,
-            style: TextStyle(fontSize: 16, fontWeight: fontWeight),
+          Container(
+            width: 190,
+            child: Text(
+              project.name,
+              style: TextStyle(fontSize: 16, fontWeight: fontWeight),
+            ),
           ),
+
           Spacer(),
           Card(
             shape: RoundedRectangleBorder(

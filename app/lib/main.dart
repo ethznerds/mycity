@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void openProjectEditor(Project? project) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context)=>ProjectEditor(project ?? Project(null, "", "", null, Stage.initial, [], null)))
+        MaterialPageRoute(builder: (context)=>ProjectEditor(project ?? Project(null, "", "", null, Stage.initial, [], null, false)))
     );
   }
 

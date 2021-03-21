@@ -8,7 +8,7 @@ class Vote extends StatefulWidget {
 }
 
 class _VoteState extends State<Vote> {
-  final itemsList = List<String>.generate(20, (i) => "Item ${i + 1}");
+  final itemsList = List<String>.generate(projects.length - 1, (i) => "Item ${i + 1}");
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +17,15 @@ class _VoteState extends State<Vote> {
 
   ListView generateItemsList() {
     return ListView.builder(
-      itemCount: itemsList.length,
+      itemCount: projects.length,
       itemBuilder: (context, index) {
         return Dismissible(
-          key: Key(itemsList[index]),
+          key: Key(index.toString()),
           child: InkWell(
               onTap: () {
-                print("${itemsList[index]} clicked");
               },
               child: ProjectItem(
-                project: projects[0],
+                project: projects[index],
               )),
           background: slideRightBackground(),
           secondaryBackground: slideLeftBackground(),
@@ -145,26 +144,5 @@ class _VoteState extends State<Vote> {
       ),
     );
   }
-/*  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.all(10),
-        itemCount: 15,
-        itemBuilder: (context, i) {
-        return Card(
-          child: Padding(
-            padding: EdgeInsets.only(
-                top: 6.0, left: 6.0, right: 6.0, bottom: 6.0),
-            child: ExpansionTile(
-              title: Text('Birth of Universe'),
-              children: <Widget>[
-                Text('Big Bang'),
-                Text('Birth of the Sun'),
-                Text('Earth is Born'),
-              ],
-            ),
-          ),
-        );
-        });
-  }}*/
+
 }

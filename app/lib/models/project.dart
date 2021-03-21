@@ -20,13 +20,14 @@ class Project {
   List<Proposal> proposals;
 
   bool sustainability = true;
+  bool education = false;
 
   int upVotes = 0;
   int downVotes = 0;
   int funding = 0;
 
 
-  Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location, [ this.richtext]);
+  Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location, this.sustainability, [ this.richtext]);
 
   Future<void> save(String name, String description, GeoPoint? location, String? richtext) async {
     final projectsDb = FirebaseFirestore.instance.collection("projects");
@@ -51,5 +52,5 @@ class Project {
 }
 
 List<Project> generateDummyProjects(){
-  return List.generate(20, (i) => new Project("xxxxx$i", "dummy $i", "blujil kj kjh jh jhg jhfhgfjhk uo iu ou oi uo uiiuouoiu ui jkh jkh gjhghgfhgfghfhgf g fhfhgfhfhfhfgf yui yiu oyu yui yiuy io u yoiuyi y iy iy b $i", AssetImage(""), Stage.denied, [], GeoPoint(47.404629 + Random().nextDouble()*1e-2, 8.503784 + Random().nextDouble()*1e-2)));
+  return List.generate(20, (i) => new Project("xxxxx$i", "dummy $i", "blujil kj kjh jh jhg jhfhgfjhk uo iu ou oi uo uiiuouoiu ui jkh jkh gjhghgfhgfghfhgf g fhfhgfhfhfhfgf yui yiu oyu yui yiuy io u yoiuyi y iy iy b $i", AssetImage(""), Stage.denied, [], GeoPoint(47.404629 + Random().nextDouble()*1e-2, 8.503784 + Random().nextDouble()*1e-2), false));
 }

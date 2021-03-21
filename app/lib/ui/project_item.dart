@@ -92,7 +92,7 @@ class _ProjectItemState extends State<ProjectItem> {
                       children: <Widget>[
                         TextButton(
                           child: Text(
-                            "buy",
+                            "fund",
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
                                 fontSize: 18),

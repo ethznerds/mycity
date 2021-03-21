@@ -41,7 +41,7 @@ class _ProjectPageState extends State<ProjectPage> {
                 SizedBox(width: 15,),
                 TextButton(
                   child: Text(
-                    "buy",
+                    "fund",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 18),
@@ -88,6 +88,18 @@ class _ProjectPageState extends State<ProjectPage> {
               ),
             Center(child: Text(widget.project.description, textAlign: TextAlign.center,),),
             SizedBox(height: 50,),
+
+            TextButton(
+              child: Text(
+                "Make an offer",
+                style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontSize: 18),
+              ),
+              onPressed: () {
+
+              },),
+
 
 
 
