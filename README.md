@@ -11,7 +11,7 @@ The App is also in this repository
 [Tutorial Video](https://drive.google.com/file/d/1z-TSvOg7sYJ5FG9NdPjAWQ-gRqhZWpVK/view?usp=sharing)
 
 ## Pitch Slides
-[]()
+[Slides and images on google drive](https://drive.google.com/drive/folders/1XqAuvPVuYwaKigtm75qj0JiUWNSCEcPL?usp=sharing)
 
 
 
