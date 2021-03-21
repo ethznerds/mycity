@@ -23,6 +23,13 @@ class _FundProjectState extends State<FundProject> {
   int touchedIndex = -1;
 
   @override
+  void initState() {
+    if (Hive.box('budget').get(widget.project.documentId) == null)
+      Hive.box('budget').put(widget.project.documentId, 0);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<Color> _colors = [
       Theme.of(context).primaryColor,
@@ -45,6 +52,21 @@ class _FundProjectState extends State<FundProject> {
         child: ValueListenableBuilder(
           valueListenable: Hive.box('budget').listenable(),
           builder: (context, box, _) {
+            var box = Hive.box('budget');
+            List<String> keys = ['wallet', widget.project.documentId ?? ""];
+            List<int> valuesInt = [box.get('wallet'), box.get(widget.project.documentId)];
+            var boxKeys = box.keys;
+            for (var k in boxKeys) {
+              if (box.get(k) > 0 && !keys.contains(k)) {
+                keys.add(k);
+                valuesInt.add(box.get(k));
+              }
+            }
+            List<double> values = [];
+            for (int i in valuesInt) {
+              values.add(i.toDouble());
+            }
+
             return Column(
               children: <Widget>[
                 SizedBox(
@@ -75,7 +97,7 @@ class _FundProjectState extends State<FundProject> {
                         sectionsSpace: 0,
                         centerSpaceRadius: 40,
                         sections:
-                        showingSections(4, _colors, [20.0, 20.0, 30.0, 30.0])),
+                        showingSections(values.length, _colors, values)),
                   ),
                 ),
               ],
