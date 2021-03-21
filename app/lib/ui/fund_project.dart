@@ -3,9 +3,10 @@ import 'package:app/models/user.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../utils/indicator.dart';
-
 
 class FundProject extends StatefulWidget {
   final UserModel userModel;
@@ -21,56 +22,74 @@ class FundProject extends StatefulWidget {
 class _FundProjectState extends State<FundProject> {
   int touchedIndex = -1;
 
-
-
   @override
   Widget build(BuildContext context) {
-
-    List<Color> _colors = [Theme.of(context).primaryColor, Theme.of(context).accentColor, Colors.grey, Colors.blueGrey];
+    List<Color> _colors = [
+      Theme.of(context).primaryColor,
+      Theme.of(context).accentColor,
+      Colors.grey,
+      Colors.blueGrey
+    ];
 
     return Scaffold(
       appBar: NewGradientAppBar(
         title: Text("Fund " + widget.project.name),
-        gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Theme.of(context).accentColor]),
+        gradient: LinearGradient(colors: [
+          Theme.of(context).primaryColor,
+          Theme.of(context).primaryColor,
+          Theme.of(context).accentColor
+        ]),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 6,),
-            _myBudget(Theme.of(context).primaryColor),
-            _projectItem(widget.project, Theme.of(context).accentColor, FontWeight.bold),
-            Container(
-              width: 400,
-            height: 400,
-            child: PieChart(
-              PieChartData(
-                  pieTouchData:
-                  PieTouchData(touchCallback: (pieTouchResponse) {
-                    setState(() {
-                      if (pieTouchResponse.touchInput is FlLongPressEnd ||
-                          pieTouchResponse.touchInput is FlPanEnd) {
-                        touchedIndex = -1;
-                      } else {
-                        touchedIndex = pieTouchResponse.touchedSectionIndex;
-                      }
-                    });
-                  }),
-                  borderData: FlBorderData(
-                    show: false,
+        child: ValueListenableBuilder(
+          valueListenable: Hive.box('budget').listenable(),
+          builder: (context, box, _) {
+            return Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 6,
+                ),
+                _myBudget(Theme.of(context).primaryColor),
+                _projectItem(
+                    widget.project, Theme.of(context).accentColor, FontWeight.bold),
+                Container(
+                  width: 400,
+                  height: 400,
+                  child: PieChart(
+                    PieChartData(
+                        pieTouchData:
+                        PieTouchData(touchCallback: (pieTouchResponse) {
+                          setState(() {
+                            if (pieTouchResponse.touchInput is FlLongPressEnd ||
+                                pieTouchResponse.touchInput is FlPanEnd) {
+                              touchedIndex = -1;
+                            } else {
+                              touchedIndex = pieTouchResponse.touchedSectionIndex;
+                            }
+                          });
+                        }),
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        sectionsSpace: 0,
+                        centerSpaceRadius: 40,
+                        sections:
+                        showingSections(4, _colors, [20.0, 20.0, 30.0, 30.0])),
                   ),
-                  sectionsSpace: 0,
-                  centerSpaceRadius: 40,
-                  sections: showingSections(4, _colors, [20.0, 20.0, 30.0, 30.0])),
-            ),
-            ),
-          ],
-        ),
+                ),
+              ],
+            );
+          },
+        )
       ),
     );
   }
 
   Widget _projectItem(Project project, Color color, FontWeight fontWeight) {
+    var box = Hive.box('budget');
+    if (box.get(project.documentId) == null || box.get(project.documentId) == 0)
+      box.put(project.documentId, 0);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -98,7 +117,6 @@ class _FundProjectState extends State<FundProject> {
               style: TextStyle(fontSize: 16, fontWeight: fontWeight),
             ),
           ),
-
           Spacer(),
           Card(
             shape: RoundedRectangleBorder(
@@ -109,7 +127,7 @@ class _FundProjectState extends State<FundProject> {
               children: <Widget>[
                 Card(
                   child: Text(
-                    "15 \$",
+                    box.get(project.documentId).toString() + " \$",
                     style: TextStyle(fontSize: 19),
                   ),
                 ),
@@ -121,14 +139,24 @@ class _FundProjectState extends State<FundProject> {
                           size: 27,
                           color: Colors.white,
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          if (box.get('wallet') >= 1) {
+                            box.put(project.documentId, box.get(project.documentId) + 1);
+                            box.put('wallet', box.get('wallet') - 1);
+                          }
+                        }),
                     IconButton(
                         icon: Icon(
-                          Icons.add_circle_outline,
+                          Icons.remove_circle_outline,
                           size: 27,
                           color: Colors.white,
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          if (box.get(project.documentId) >= 1) {
+                            box.put(project.documentId, box.get(project.documentId) - 1);
+                            box.put('wallet', box.get('wallet') + 1);
+                          }
+                        }),
                   ],
                 ),
               ],
@@ -172,7 +200,7 @@ class _FundProjectState extends State<FundProject> {
           Card(
             color: Colors.white,
             child: Text(
-              "15 \$",
+              Hive.box('budget').get('wallet').toString() + " \$",
               style: TextStyle(fontSize: 19),
             ),
           ),
@@ -268,7 +296,8 @@ class _FundProjectState extends State<FundProject> {
   //   );
   // }
 
-  List<PieChartSectionData> showingSections(int size, List<Color> colors, List<double> percents) {
+  List<PieChartSectionData> showingSections(
+      int size, List<Color> colors, List<double> percents) {
     return List.generate(size, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
