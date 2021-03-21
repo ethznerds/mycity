@@ -19,12 +19,14 @@ class Project {
   Stage stage;
   List<Proposal> proposals;
 
+  bool sustainability = true;
+
   int upVotes = 0;
   int downVotes = 0;
   int funding = 0;
 
 
-  Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location, [this.richtext]);
+  Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location, [ this.richtext]);
 
   Future<void> save(String name, String description, GeoPoint? location, String? richtext) async {
     final projectsDb = FirebaseFirestore.instance.collection("projects");

@@ -23,12 +23,12 @@ class _ProjectItemState extends State<ProjectItem> {
       highlightColor: Theme.of(context).primaryColor,
       splashColor: Theme.of(context).primaryColor,
       onTap: () {
-
-
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ProjectPage(project: widget.project,)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProjectPage(
+                      project: widget.project,
+                    )));
       },
       child: Card(
         elevation: 2,
@@ -43,24 +43,25 @@ class _ProjectItemState extends State<ProjectItem> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   widget.project.stage == Stage.initial
-                      ? Icon(Icons.lightbulb_outline)
-                      : Icon(Icons.article_outlined),
+                      ? Icon(
+                          Icons.lightbulb_outline,
+                          color: Colors.orange,
+                        )
+                      : Icon(
+                          Icons.article_outlined,
+                          color: Colors.brown,
+                        ),
                   SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text((widget.project.upVotes + widget.project.downVotes)
-                          .toString()),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(Icons.thumbs_up_down_outlined),
-                    ],
-                  ),
+                  widget.project.sustainability
+                      ? Icon(
+                          Icons.spa_outlined,
+                          color: Colors.green,
+                        )
+                      : Container(),
                   SizedBox(
-                    height: 25,
+                    height: 70,
                   ),
                 ],
               ),
@@ -80,7 +81,12 @@ class _ProjectItemState extends State<ProjectItem> {
                     SizedBox(
                       height: 5,
                     ),
-                    Text(widget.project.description, softWrap: true,maxLines: 5, overflow: TextOverflow.ellipsis,),
+                    Text(
+                      widget.project.description,
+                      softWrap: true,
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -95,7 +101,10 @@ class _ProjectItemState extends State<ProjectItem> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => FundProject(project: widget.project, userModel: UserModel(),)));
+                                    builder: (context) => FundProject(
+                                          project: widget.project,
+                                          userModel: UserModel(),
+                                        )));
                           },
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all<

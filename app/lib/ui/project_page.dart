@@ -62,6 +62,9 @@ class _ProjectPageState extends State<ProjectPage> {
                                       .primaryColor)))),
                 ),
                 Spacer(),
+                SizedBox(width: 20,),
+                ThumbsUpDown(),
+                Spacer(),
                 IconButton(
                   icon: Icon(Icons.share_outlined),
                   onPressed: () {},
@@ -86,7 +89,7 @@ class _ProjectPageState extends State<ProjectPage> {
             Center(child: Text(widget.project.description, textAlign: TextAlign.center,),),
             SizedBox(height: 50,),
 
-            ThumbsUpDown(),
+
 
           ],
         ),
