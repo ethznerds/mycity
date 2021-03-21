@@ -27,6 +27,7 @@ void main() async {
   await Hive.openBox('keyToName');
   if (Hive.box('budget') == null)
     Hive.box('budget').put('wallet', 10);
+  Hive.box('budget').put('wallet', 10);
 
   WidgetsFlutterBinding.ensureInitialized();
 

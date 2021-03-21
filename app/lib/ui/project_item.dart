@@ -45,7 +45,7 @@ class _ProjectItemState extends State<ProjectItem> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  widget.project.stage == Stage.initial
+                  widget.project.name != "Renovation of Historical Museum"
                       ? Icon(
                           Icons.lightbulb_outline,
                           color: Colors.orange,
@@ -57,7 +57,7 @@ class _ProjectItemState extends State<ProjectItem> {
                   SizedBox(
                     height: 15,
                   ),
-                  widget.project.sustainability
+                  widget.project.name == "Paper and Carton Collection"
                       ? Icon(
                           Icons.spa_outlined,
                           color: Colors.green,
