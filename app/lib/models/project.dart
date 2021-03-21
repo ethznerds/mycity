@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:app/models/proposal.dart';
@@ -23,14 +24,17 @@ class Project {
   bool education = false;
   bool culture = false;
 
-  int upVotes = 0;
-  int downVotes = 0;
+  List<String> upVotes = [];
+  List<String> downVotes = [];
   int funding = 0;
 
   int cost = -1;
 
 
-  Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location, this.sustainability, this.education, this.culture, this.cost, [ this.richtext]);
+  Project(this.documentId, this.name, this.description, this.image, this.stage, this.proposals, this.location, this.sustainability, this.education, this.culture, this.cost, [ this.richtext, upVotes, downVotes]) {
+    this.upVotes = upVotes ?? [];
+    this.downVotes = downVotes ?? [];
+  }
 
   Future<void> save(String name, String description, GeoPoint? location, String? richtext, String? image) async {
     final projectsDb = FirebaseFirestore.instance.collection("projects");
@@ -55,6 +59,14 @@ class Project {
     }
   }
 
+  Future<void> updateVotes() {
+    final projectsDb = FirebaseFirestore.instance.collection("projects");
+    return projectsDb.doc(documentId).update({
+      "upVotes": upVotes,
+      "downVotes": downVotes
+    });
+  }
+
   static Project mapDocumentToProject(DocumentSnapshot docFull) {
     var doc = docFull.data();
     return Project(
@@ -70,6 +82,8 @@ class Project {
         doc['culture'] ?? false,
         doc['cost'] ?? -1,
         doc['richtext'],
+        (doc['upVotes'] as List).cast<String>().toList(),
+        (doc['downVotes'] as List).cast<String>().toList()
     );
   }
 }
