@@ -68,7 +68,8 @@ class Project {
         doc['sustainability'] ?? false,
         doc['education'] ?? false,
         doc['culture'] ?? false,
-        doc['cost'] ?? -1
+        doc['cost'] ?? -1,
+        doc['richtext'],
     );
   }
 }
