@@ -20,6 +20,9 @@ dependencies:
   provider: ^5.0.0
   firebase_core: ^1.0.1
 
+  hive: ^2.0.0
+  hive_flutter: ^1.0.0
+
   fl_chart: ^0.20.1
   new_gradient_app_bar: ^0.1.5
 

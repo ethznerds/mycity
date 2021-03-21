@@ -72,7 +72,7 @@ class _ProjectPageState extends State<ProjectPage> {
                 ),
                 Spacer(),
                 SizedBox(width: 20,),
-                ThumbsUpDown(),
+                ThumbsUpDown(project: widget.project,),
                 Spacer(),
                 IconButton(
                   icon: Icon(Icons.share_outlined),
