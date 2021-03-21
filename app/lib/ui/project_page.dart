@@ -6,6 +6,7 @@ import 'package:app/models/project.dart';
 import 'package:app/models/user.dart';
 import 'package:app/ui/fund_project.dart';
 import 'package:app/utils/thumbs_up_down.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 import 'package:zefyr/zefyr.dart';
@@ -83,7 +84,7 @@ class _ProjectPageState extends State<ProjectPage> {
                 ),
                 Spacer(),
                 SizedBox(width: 20,),
-                ThumbsUpDown(project: widget.project,),
+                thumbsWrapper(),
                 Spacer(),
                 IconButton(
                   icon: Icon(Icons.share_outlined),
@@ -166,6 +167,27 @@ class _ProjectPageState extends State<ProjectPage> {
       ),
     );
   }
+
+  Widget thumbsWrapper() {
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance.collection("projects").doc(widget.project.documentId).snapshots(),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if(snapshot.hasData) {
+            var project = Project.mapDocumentToProject(snapshot.data!);
+            //var project = Project("", "", "", "", Stage.initial, [], null, false, false, false, 0);
+            log("hekjhkjhkhkre ${project.downVotes.length}");
+            return ThumbsUpDown(project: project,);
+          }
+
+          if(snapshot.hasError) {
+            return Text("Error!");
+          }
+
+          return Text("Loading....");
+        }
+    );
+  }
+
   NotusDocument _loadDocument(Project project) {
     final json =
         r'[{"insert":"No further details provided\n"}]';

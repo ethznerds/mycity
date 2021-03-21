@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:app/models/project.dart';
 import 'package:app/models/user.dart';
 import 'package:app/ui/fund_project.dart';
 import 'package:app/ui/fund_project2.dart';
 import 'package:app/ui/project_page.dart';
 import 'package:app/utils/thumbs_up_down.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
@@ -116,7 +119,7 @@ class _ProjectItemState extends State<ProjectItem> {
                                               .primaryColor)))),
                         ),
                         Spacer(),
-                        ThumbsUpDown(project: widget.project,),
+                        thumbsWrapper(),
                       ],
                     ),
                   ],
@@ -176,6 +179,25 @@ class _ProjectItemState extends State<ProjectItem> {
         ),*/
         ),
       ),
+    );
+  }
+  Widget thumbsWrapper() {
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance.collection("projects").doc(widget.project.documentId).snapshots(),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if(snapshot.hasData) {
+            var project = Project.mapDocumentToProject(snapshot.data!);
+            //var project = Project("", "", "", "", Stage.initial, [], null, false, false, false, 0);
+            log("hekjhkjhkhkre ${project.downVotes.length}");
+            return ThumbsUpDown(project: project,);
+          }
+
+          if(snapshot.hasError) {
+            return Text("Error!");
+          }
+
+          return Text("Loading....");
+        }
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:app/models/project.dart';
 import 'package:app/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -46,46 +47,48 @@ class _ThumbsUpDownState extends State<ThumbsUpDown> {
     );
   }
   getThumbButton(IconData iconData, int add, Color activeColor, Project project) {
+    var currentUser = FirebaseAuth.instance.currentUser;
     return ValueListenableBuilder(valueListenable: _box.listenable(),
         builder: (context, box, widget) {
+          var highlight = false;
+          if(currentUser != null) {
+            var source = add == 1 ? project.upVotes : project.downVotes;
+            highlight = source.contains(currentUser.uid);
+          }
           return InkWell(
             child: Row(
               children: <Widget>[
-                Icon(iconData, color: add == _box.get(project.documentId) ? activeColor : Colors.black,),
-                Text(add == 1 ? project.upVotes.toString() : project.downVotes.toString(),)
+                Icon(iconData, color: highlight ? activeColor : Colors.black,),
+                Text(add == 1 ? project.upVotes.length.toString() : project.downVotes.length.toString(),)
               ],
             ),
             onTap: () {
-              if (add == 1) {
-                if(add == _box.get(project.documentId)) {
-                  project.upVotes--;
-                  _box.put(project.documentId, 0);
-                } else if (0 == _box.get(project.documentId)) {
-                  project.upVotes++;
-                  _box.put(project.documentId, 1);
+              if(currentUser == null) {
+                return;
+              }
+              if (add == 1) { // upThumb pressed
+                if(!project.upVotes.contains(currentUser.uid)) {
+                  project.upVotes.add(currentUser.uid);
                 } else {
-                  project.downVotes--;
-                  project.upVotes++;
-                  _box.put(project.documentId, 1);
+                  project.upVotes.remove(currentUser.uid);
+                }
+                if(project.downVotes.contains(currentUser.uid)) {
+                  project.downVotes.remove(currentUser.uid);
                 }
               }
-              else
-                {
-                  if(add == _box.get(project.documentId)) {
-                    project.downVotes--;
-                    _box.put(project.documentId, 0);
-                  } else if (0 == _box.get(project.documentId)) {
-                    project.downVotes++;
-                    _box.put(project.documentId, -1);
-                  } else {
-                    project.upVotes--;
-                    project.downVotes++;
-                    _box.put(project.documentId, -1);
-                  }
-
+              else {
+                if(!project.downVotes.contains(currentUser.uid)) {
+                  project.downVotes.add(currentUser.uid);
+                } else {
+                  project.downVotes.remove(currentUser.uid);
+                }
+                if(project.upVotes.contains(currentUser.uid)) {
+                  project.upVotes.remove(currentUser.uid);
+                }
               }
+              project.updateVotes();
             },
-          );;
+          );
         });
   }
 }
