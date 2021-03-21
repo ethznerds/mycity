@@ -108,16 +108,58 @@ class _ProjectPageState extends State<ProjectPage> {
               padding: EdgeInsets.only(left: 16, right: 16),
               //onLaunchUrl: _launchUrl,
             ),
-            TextButton(
-              child: Text(
-                "Make an offer",
-                style: TextStyle(
-                    color: Theme.of(context).accentColor,
-                    fontSize: 18),
-              ),
-              onPressed: () {
+            SizedBox(height: 30,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        side: BorderSide(color: Colors.teal, width: 2.0),
+                        padding: EdgeInsets.all(15),
+                      ),
+                      child: Text(
+                        "Make an offer",
+                        style: TextStyle(
+                            color: Colors.teal,
+                            fontSize: 18),
+                      ),
+                      onPressed: () {
 
-              },),
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        side: BorderSide(color: Theme.of(context).primaryColor, width: 2.0),
+                        padding: EdgeInsets.all(15),
+                      ),
+                      child: Text(
+                        "Participate",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 18),
+                      ),
+                      onPressed: () {
+
+                      },
+                    ),
+                  )
+                )
+              ],
+            )
 
           ],
         ),
