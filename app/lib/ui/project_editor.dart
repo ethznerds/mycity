@@ -4,11 +4,14 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:app/models/project.dart';
+import 'package:app/utils/locationHelper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fbs;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:image/image.dart' as ImageLibrary;
 import 'package:image_picker/image_picker.dart';
 import 'package:zefyr/zefyr.dart';
@@ -34,9 +37,11 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
   final projectsDb = FirebaseFirestore.instance.collection("projects");
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final addressController = TextEditingController();
   final imagePicker = ImagePicker();
   late AnimationController animController;
   File? _image;
+  PickResult? pickedPlace;
 
   ZefyrController? _rtController;
   FocusNode? _focusNode;
@@ -85,6 +90,25 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
     return result.ref.getDownloadURL();
   }
 
+  void pickPlace(BuildContext context) {
+      Navigator.push(context,
+        MaterialPageRoute(
+            builder: (context)=>PlacePicker(
+                apiKey: "AIzaSyB6LLJta03nFMx0ZIOqa85OZKNsjKrFnc8",
+                initialPosition: LatLng(0.0, 0.0),
+                useCurrentLocation: true,
+                onPlacePicked: (result) {
+                  setState(() {
+                    pickedPlace = result;
+                    addressController.text = result.formattedAddress ?? "";
+                  });
+                  Navigator.of(context).pop();
+                },
+            )
+        )
+      );
+  }
+
   void saveEntry() async {
     setState(() {
       showSpinner = true;
@@ -92,7 +116,7 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
     widget.project.save(
         titleController.text,
         descriptionController.text,
-        null,
+        pickedPlace == null ? null : GeoPoint(pickedPlace!.geometry!.location.lat, pickedPlace!.geometry!.location.lng),
         jsonEncode(_rtController!.document),
         _image == null ? null : await prepareImageForUpload(_image!)
     ).then((value) {
@@ -196,6 +220,17 @@ class _ProjectEditorState extends State<ProjectEditor> with TickerProviderStateM
                                   )
                               ),
                               if(_image != null) Image.file(_image!, height: 150,),
+                              Padding(
+                                padding: EdgeInsets.all(15),
+                                child: TextField(
+                                  onTap: ()=>pickPlace(context),
+                                  controller: addressController,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "Click here to add an address"
+                                  ),
+                                ),
+                              ),
                               ZefyrField(
                                 controller: _rtController,
                                 focusNode: _focusNode,

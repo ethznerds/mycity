@@ -30,6 +30,8 @@ dependencies:
   location: ^4.1.1
 
   quill_delta: ^2.0.0
+  google_maps_place_picker:
+    git: git@github.com:fysoul17/google_maps_place_picker.git
 
   zefyr:
     git:
