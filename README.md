@@ -31,6 +31,8 @@ Intuitive App with different ways to browse the projects (on a map, as a list of
 
 
 # Tech
-Cross Platform Flutter App for Android, iOS, and Web
+- Cross Platform Flutter App for Android, iOS, and Web
+- Firebase and Firestore Cloud Services
+
 
 
