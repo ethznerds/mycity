@@ -8,6 +8,7 @@ import 'package:app/ui/fund_project.dart';
 import 'package:app/utils/thumbs_up_down.dart';
 import 'package:flutter/material.dart';
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
+import 'package:zefyr/zefyr.dart';
 
 class ProjectPage extends StatefulWidget {
   final Project project;
@@ -18,9 +19,19 @@ class ProjectPage extends StatefulWidget {
 }
 
 class _ProjectPageState extends State<ProjectPage> {
+  ZefyrController? _rtController;
+  FocusNode? _focusNode;
 
   Image displayImage(String url) {
-    return Image.network(url, fit: BoxFit.cover, height: 200,);
+    return Image.network(url, fit: BoxFit.cover, height: 250,);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final document = _loadDocument(widget.project);
+    _rtController = ZefyrController(document);
+    _focusNode = FocusNode();
   }
 
   @override
@@ -43,7 +54,7 @@ class _ProjectPageState extends State<ProjectPage> {
               ),
               elevation: 3.0,
             ),
-            SizedBox(height: 7,),
+            SizedBox(height: 15,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -86,18 +97,17 @@ class _ProjectPageState extends State<ProjectPage> {
                 const SizedBox(width: 8),
               ],
             ),
-            SizedBox(height: 7,),
-             Row(
-                children: <Widget>[
-                  Expanded(
-                  child: Container(width: 50,),
-                  ),
-                  Expanded(child: Text(widget.project.description, textAlign: TextAlign.center,)),
-                ],
-              ),
-            Center(child: Text(widget.project.description, textAlign: TextAlign.center,),),
-            SizedBox(height: 50,),
-
+            SizedBox(height: 15,),
+            Center(child: Text(widget.project.description, textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),),
+            SizedBox(height: 15,),
+            ZefyrField(
+              controller: _rtController,
+              focusNode: _focusNode,
+              autofocus: false,
+              readOnly: true,
+              padding: EdgeInsets.only(left: 16, right: 16),
+              //onLaunchUrl: _launchUrl,
+            ),
             TextButton(
               child: Text(
                 "Make an offer",
@@ -109,14 +119,16 @@ class _ProjectPageState extends State<ProjectPage> {
 
               },),
 
-
-
-
           ],
         ),
       ),
-
     );
+  }
+  NotusDocument _loadDocument(Project project) {
+    final json =
+        r'[{"insert":"No further details provided\n"}]';
+    final document = NotusDocument.fromJson(jsonDecode(project.richtext ?? json));
+    return document;
   }
 }
 
