@@ -43,7 +43,8 @@ class Project {
       "name": name,
       "description": description,
       "richtext": richtext,
-      "image": image
+      "image": image,
+      "location": location
     };
 
     if(documentId != null) {
